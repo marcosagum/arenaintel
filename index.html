@@ -561,172 +561,78 @@
     </div>
 
     <!-- ============================================== -->
-    <!-- TAB 5: ACESSO À PESQUISA -->
+    <!-- TAB 5: ACESSO À PESQUISA (QR CODE UNIFICADO) -->
     <!-- ============================================== -->
-    <div id="tabContent5" class="space-y-6 hidden">
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <div id="tabContent5" class="space-y-6 hidden flex flex-col items-center">
+      
+      <!-- Centralized QR Code & Link (Clean View) -->
+      <div class="bg-card-bg border border-card-border p-8 rounded-xl flex flex-col gap-6 corporate-shadow max-w-2xl w-full">
+        <div class="text-center">
+          <h3 class="text-base font-bold text-white uppercase tracking-wider flex items-center justify-center gap-2">
+            <i data-lucide="qr-code" class="h-6 w-6 text-brand-red"></i>
+            Canal de Coleta de Satisfação do Cliente
+          </h3>
+          <p class="text-xs text-slate-400 mt-1.5">
+            Disponibilize o QR Code oficial abaixo nos totens de saída, pontos de alimentação, ingressos ou displays para que o público responda à pesquisa.
+          </p>
+        </div>
         
-        <!-- QR Code & Link Card (Left) -->
-        <div class="bg-card-bg border border-card-border p-6 rounded-xl flex flex-col gap-6 corporate-shadow">
-          <div>
-            <h3 class="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
-              <i data-lucide="qr-code" class="h-5 w-5 text-brand-red"></i>
-              Captação de Feedbacks: QR Code &amp; Totens
-            </h3>
-            <p class="text-xs text-slate-400 mt-1">
-              Disponibilize o QR Code abaixo nos totens de saída, mesas, ingressos ou displays informativos para coleta de opiniões do público em tempo real.
-            </p>
+        <div class="flex flex-col sm:flex-row items-center gap-8 bg-[#121417]/60 p-6 rounded-lg border border-card-border/40">
+          <!-- Glowing QR Code Container -->
+          <div class="bg-white p-4 rounded-xl corporate-shadow flex items-center justify-center border-2 border-brand-red/35 flex-shrink-0">
+            <img id="qrCodeImg" src="" alt="QR Code Pesquisa de Satisfação" class="w-[160px] h-[160px] object-contain">
           </div>
           
-          <div class="flex flex-col sm:flex-row items-center gap-6 bg-[#121417]/60 p-5 rounded-lg border border-card-border/40">
-            <!-- Glowing QR Code Container -->
-            <div class="bg-white p-3.5 rounded-xl corporate-shadow flex items-center justify-center border-2 border-brand-red/35">
-              <img id="qrCodeImg" src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https://docs.google.com/forms/d/e/1FAIpQLSf5u6W2Z8c8_mock_form_url/viewform" alt="QR Code Pesquisa de Satisfação" class="w-[160px] h-[160px] object-contain">
+          <div class="space-y-4 flex-1 w-full">
+            <div class="space-y-1">
+              <p class="text-[9px] uppercase font-bold text-slate-500 tracking-wider">Link Oficial de Resposta</p>
+              <a id="surveyLink" href="" target="_blank" class="text-xs font-bold text-brand-red hover:underline break-all flex items-center gap-1">
+                Carregando link... <i data-lucide="external-link" class="h-3.5 w-3.5"></i>
+              </a>
             </div>
             
-            <div class="space-y-4 flex-1">
-              <div class="space-y-1">
-                <p class="text-[9px] uppercase font-bold text-slate-500 tracking-wider">Link Direto da Pesquisa</p>
-                <a href="https://docs.google.com/forms/d/e/1FAIpQLSf5u6W2Z8c8_mock_form_url/viewform" target="_blank" class="text-xs font-bold text-brand-red hover:underline break-all flex items-center gap-1">
-                  https://docs.google.com/forms/d/e/1FAIpQLSf5u6W2... <i data-lucide="external-link" class="h-3.5 w-3.5"></i>
-                </a>
-              </div>
-              
-              <div class="space-y-1.5">
-                <p class="text-[9px] uppercase font-bold text-slate-500 tracking-wider">Instruções Operacionais</p>
-                <ul class="text-[10px] text-slate-400 space-y-1 leading-normal list-disc list-inside">
-                  <li><strong>Totens de Saída:</strong> Configure nos portões A, B e VIP.</li>
-                  <li><strong>QR Code de Mesa:</strong> Imprima nas praças de alimentação (A&B).</li>
-                  <li><strong>Encarte do Ingresso:</strong> Envie no e-mail pós-evento.</li>
-                </ul>
-              </div>
+            <div class="space-y-1.5">
+              <p class="text-[9px] uppercase font-bold text-slate-500 tracking-wider">Instruções de Posicionamento</p>
+              <ul class="text-[10px] text-slate-400 space-y-1.5 leading-normal list-disc list-inside">
+                <li><strong>Totens Físicos:</strong> Ideal para exibição em tablets ou impressos nos portões de saída da Arena.</li>
+                <li><strong>Pontos A&B:</strong> Posicione nas mesas e balcões de alimentação.</li>
+                <li><strong>Ingressos Digitais:</strong> Insira no e-mail de agradecimento pós-evento.</li>
+              </ul>
             </div>
           </div>
-          
-          <div class="text-[11px] text-slate-500 bg-[#121417]/30 p-3 rounded border border-card-border/30">
-            <i data-lucide="info" class="h-3.5 w-3.5 inline mr-1 text-brand-red"></i>
-            O QR Code direciona para o formulário oficial. As respostas preenchidas alimentam a planilha vinculada de forma instantânea.
-          </div>
         </div>
         
-        <!-- Google Apps Script Card (Right) -->
-        <div class="bg-card-bg border border-card-border p-6 rounded-xl flex flex-col gap-4 corporate-shadow">
-          <div>
-            <h3 class="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
-              <i data-lucide="terminal" class="h-5 w-5 text-brand-red"></i>
-              Automação de Captura (Google Apps Script)
-            </h3>
-            <p class="text-xs text-slate-400 mt-1">
-              Código para instalação no Google Sheets. Ele cria o formulário automaticamente e envia as respostas recebidas ao pipeline de IA em tempo real.
-            </p>
-          </div>
-          
-          <!-- Code Block with Copy Button -->
-          <div class="relative flex-1 flex flex-col min-h-[280px]">
-            <button onclick="copyAppsScript()" class="absolute right-3 top-3 bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 hover:text-white px-2.5 py-1.5 rounded text-[10px] font-bold transition-all flex items-center gap-1.5 z-10">
-              <i data-lucide="copy" class="h-3.5 w-3.5" id="copyIcon"></i> <span id="copyText">Copiar</span>
-            </button>
-            <pre class="flex-1 bg-[#121417] p-4 rounded-lg border border-card-border/80 text-[10px] font-mono text-emerald-400 overflow-y-auto leading-relaxed select-all max-h-[300px] min-h-[240px]" id="appsScriptCode">
-/**
- * Script para automação do ArenaIntel v2.1
- * Instale no menu 'Extensões' > 'Apps Script' de sua Planilha de Respostas.
- */
-
-// Configuração do Webhook da IA
-const WEBHOOK_URL = "https://api.arenaintel.com/v1/webhook-feedback";
-
-/**
- * Cria o Formulário do Google Forms e vincula a esta Planilha
- */
-function setupArenaIntelForm() {
-  const sheet = SpreadsheetApp.getActiveSpreadsheet();
-  const form = FormApp.create("ArenaIntel - Pesquisa de Satisfação")
-      .setDescription("Coleta oficial de experiência do cliente da Arena.")
-      .setConfirmationMessage("Obrigado pelo seu feedback! Sua opinião melhora o evento.")
-      .setAllowResponseEdits(false);
-      
-  // Show / Evento
-  form.addMultipleChoiceItem()
-      .setTitle("Qual show você assistiu?")
-      .setChoices([
-        form.newChoice("Thiaguinho"),
-        form.newChoice("Kid Abelha"),
-        form.newChoice("Coldplay"),
-        form.newChoice("Ivete Sangalo")
-      ])
-      .setRequired(true);
-      
-  // Nota
-  form.addScaleItem()
-      .setTitle("Como você avalia a experiência geral do evento?")
-      .setBounds(1, 5)
-      .setLabels("Crítico / Ruim", "Excelente / Perfeito")
-      .setRequired(true);
-      
-  // Feedback Textual
-  form.addParagraphTextItem()
-      .setTitle("Conte-nos mais detalhes (filas, som, limpeza, segurança...):")
-      .setRequired(true);
-      
-  // Setor Físico
-  form.addMultipleChoiceItem()
-      .setTitle("Em qual setor você assistiu?")
-      .setChoices([
-        form.newChoice("Pista Premium"),
-        form.newChoice("Arquibancada"),
-        form.newChoice("Camarote")
-      ])
-      .setRequired(true);
-      
-  // Faixa Etária
-  form.addMultipleChoiceItem()
-      .setTitle("Qual a sua faixa etária?")
-      .setChoices([
-        form.newChoice("18-25"),
-        form.newChoice("26-35"),
-        form.newChoice("36-50"),
-        form.newChoice("50+")
-      ])
-      .setRequired(true);
-      
-  // Vincula à Planilha ativa
-  form.setDestination(FormApp.DestinationType.SPREADSHEET, sheet.getId());
-  Logger.log("Formulário URL: " + form.getPublishedUrl());
-}
-
-/**
- * Gatilho executado a cada envio de resposta do formulário
- */
-function onFormSubmit(e) {
-  const values = e.values;
-  const payload = {
-    timestamp: values[0],
-    show: values[1],
-    nota: parseInt(values[2]),
-    feedback: values[3],
-    setor: values[4],
-    faixaEtaria: values[5]
-  };
-  
-  const options = {
-    method: "post",
-    contentType: "application/json",
-    payload: JSON.stringify(payload),
-    muteHttpExceptions: true
-  };
-  
-  try {
-    const response = UrlFetchApp.fetch(WEBHOOK_URL, options);
-    Logger.log("Sucesso: " + response.getContentText());
-  } catch (err) {
-    Logger.log("Erro: " + err.toString());
-  }
-}
-            </pre>
-          </div>
+        <div class="text-[11px] text-slate-500 bg-[#121417]/30 p-3.5 rounded border border-card-border/30 text-center leading-relaxed">
+          <i data-lucide="info" class="h-4 w-4 inline mr-1 text-brand-red -mt-0.5"></i>
+          As respostas enviadas pelo público alimentam diretamente a planilha integrada e recalculam o dashboard instantaneamente.
         </div>
-        
       </div>
+
+      <!-- Configuração da URL (Exclusivo Administradores) -->
+      <div class="bg-card-bg border border-card-border p-5 rounded-xl corporate-shadow max-w-2xl w-full">
+        <details class="group">
+          <summary class="text-xs font-bold text-slate-400 hover:text-slate-300 cursor-pointer select-none flex items-center justify-between list-none">
+            <span class="flex items-center gap-2">
+              <i data-lucide="settings" class="h-4 w-4 text-slate-500 group-open:text-brand-red transition-colors"></i>
+              Painel do Administrador: Trocar Formulário de Captura
+            </span>
+            <i data-lucide="chevron-down" class="h-4 w-4 text-slate-500 transition-transform group-open:rotate-180"></i>
+          </summary>
+          
+          <div class="mt-4 pt-4 border-t border-card-border/60 space-y-3.5">
+            <p class="text-[10px] text-slate-400 leading-normal">
+              Se você criar um novo Google Forms para o próximo show, cole o link dele abaixo para atualizar o QR Code do totem imediatamente. O link fica gravado na memória deste computador.
+            </p>
+            <div class="flex gap-2">
+              <input type="text" id="adminFormUrlInput" class="flex-1 bg-[#121417] border border-card-border rounded-lg px-3 py-2 text-xs text-white placeholder-slate-600 focus:outline-none focus:border-brand-red" placeholder="Cole o link de responder do Google Forms (ex: https://docs.google.com/forms/...)">
+              <button onclick="saveAdminFormUrl()" class="bg-brand-red hover:bg-brand-red-hover text-xs font-bold text-white px-4 py-2 rounded-lg transition-all flex items-center gap-1.5">
+                <i data-lucide="save" class="h-3.5 w-3.5"></i> Salvar URL
+              </button>
+            </div>
+          </div>
+        </details>
+      </div>
+        
     </div>
 
   </div>
@@ -824,32 +730,13 @@ function onFormSubmit(e) {
   <!-- ============================================== -->
   <script>
     // -----------------------------------------------------------
-    // DATABASE: LOCAL FALLBACK MOCK DATA
+    // DATABASE: PLANILHA E GOOGLE FORMS
     // -----------------------------------------------------------
-    let feedbackData = [
-      { id:1, show:"Thiaguinho", nota:5, feedback:"O som estava perfeito na pista premium! Deu pra ouvir cada detalhe dos instrumentos, e o artista deu um show espetacular.", setor:"Pista Premium", pilar:"Operações", satisfacao:"Excelente", resumo:"Elogio ao som e à performance acústica geral na Pista Premium.", sugestao:"Manter calibração do sistema de som nos mesmos parâmetros.", timestamp:"20:45", insightRegistrado:false, insightTexto:"", insightResponsavel:"", faixaEtaria:"26-35", temporada:"2026" },
-      { id:2, show:"Thiaguinho", nota:2, feedback:"Filas imensas nos bares da pista premium. Fiquei quase 40 minutos para conseguir comprar água mineral.", setor:"Pista Premium", pilar:"A&B", satisfacao:"Crítico", resumo:"Reclamação de atraso no atendimento e formação de filas longas nos caixas.", sugestao:"Aumentar número de caixas móveis e equipe de bar em eventos de alta demanda.", timestamp:"20:55", insightRegistrado:false, insightTexto:"", insightResponsavel:"", faixaEtaria:"18-25", temporada:"2026" },
-      { id:3, show:"Thiaguinho", nota:1, feedback:"Os banheiros da arquibancada estavam imundos e sem água nas pias já no meio do show. Situação insuportável.", setor:"Arquibancada", pilar:"Manutenção", satisfacao:"Crítico", resumo:"Falta de higiene e desabastecimento de água nas torneiras do setor.", sugestao:"Reforçar equipe de limpeza volante e garantir abastecimento constante de caminhão pipa.", timestamp:"21:10", insightRegistrado:false, insightTexto:"", insightResponsavel:"", faixaEtaria:"36-50", temporada:"2026" },
-      { id:4, show:"Thiaguinho", nota:3, feedback:"A segurança na entrada foi muito confusa, filas se misturando na calçada. Mas lá dentro o acesso estava fluindo.", setor:"Arquibancada", pilar:"Segurança", satisfacao:"Médio", resumo:"Confusão e lentidão na organização das filas externas de acesso.", sugestao:"Instalar grades de contenção extras e sinalização clara dos setores na calçada externa.", timestamp:"18:40", insightRegistrado:false, insightTexto:"", insightResponsavel:"", faixaEtaria:"26-35", temporada:"2026" },
-      { id:5, show:"Thiaguinho", nota:4, feedback:"O camarote tem uma vista ótima e serviço rápido, porém o som do palco secundário estava embolando um pouco.", setor:"Camarote", pilar:"Camarote", satisfacao:"Excelente", resumo:"Boa experiência de camarote, com ressalvas de propagação sonora secundária.", sugestao:"Ajustar caixas de reforço (delay line) direcionadas para a área dos camarotes.", timestamp:"21:20", insightRegistrado:false, insightTexto:"", insightResponsavel:"", faixaEtaria:"26-35", temporada:"2026" },
-      { id:6, show:"Kid Abelha", nota:5, feedback:"Que show maravilhoso! Muito bem organizado, banheiros impecáveis e atendimento super rápido nos bares.", setor:"Camarote", pilar:"Camarote", satisfacao:"Excelente", resumo:"Elogio à organização geral, limpeza de banheiros e rapidez de bar VIP.", sugestao:"Replicar modelo operacional de limpeza adotado neste setor para toda a Arena.", timestamp:"21:30", insightRegistrado:false, insightTexto:"", insightResponsavel:"", faixaEtaria:"50+", temporada:"2025" },
-      { id:7, show:"Kid Abelha", nota:2, feedback:"Na arquibancada o som estava excessivamente baixo. Quem ficou na parte superior não ouvia bem os vocais.", setor:"Arquibancada", pilar:"Operações", satisfacao:"Crítico", resumo:"Volume de som insuficiente na cobertura superior da arquibancada.", sugestao:"Redirecionar os line arrays de alta cobertura para atingir o topo da arquibancada.", timestamp:"20:50", insightRegistrado:false, insightTexto:"", insightResponsavel:"", faixaEtaria:"36-50", temporada:"2025" },
-      { id:8, show:"Kid Abelha", nota:3, feedback:"A segurança demorou muito para revistar a galera na entrada. Entramos com o show já começado.", setor:"Pista Premium", pilar:"Segurança", satisfacao:"Médio", resumo:"Revista lenta provocando atraso na entrada do público.", sugestao:"Aumentar quantidade de portões detectores e readequar a escala de segurança de entrada.", timestamp:"19:15", insightRegistrado:false, insightTexto:"", insightResponsavel:"", faixaEtaria:"26-35", temporada:"2025" },
-      { id:9, show:"Kid Abelha", nota:4, feedback:"Bares organizados e sem muita fila. O refrigerante podia estar mais gelado, mas foi boa a experiência.", setor:"Pista Premium", pilar:"A&B", satisfacao:"Excelente", resumo:"Atendimento aceitável com leve ressalva sobre temperatura das bebidas.", sugestao:"Verificar freezers das ilhas internas e otimizar reabastecimento de gelo.", timestamp:"20:10", insightRegistrado:false, insightTexto:"", insightResponsavel:"", faixaEtaria:"18-25", temporada:"2025" },
-      { id:10, show:"Coldplay", nota:5, feedback:"Incrível! Tudo impecável. Segurança super atenciosa, som perfeito em todos os cantos e bares muito rápidos.", setor:"Pista Premium", pilar:"Segurança", satisfacao:"Excelente", resumo:"Excelência em segurança de contenção, clareza sonora e velocidade nos bares.", sugestao:"Manter padrão operacional internacional adotado neste show de alta performance.", timestamp:"21:40", insightRegistrado:false, insightTexto:"", insightResponsavel:"", faixaEtaria:"26-35", temporada:"2026" },
-      { id:11, show:"Coldplay", nota:5, feedback:"A estrutura do camarote estava sensacional. Banheiros higienizados de minuto em minuto e som cristalino.", setor:"Camarote", pilar:"Camarote", satisfacao:"Excelente", resumo:"Avaliação máxima de banheiros e som no setor de Camarotes.", sugestao:"Continuar com os mesmos fornecedores terceirizados de limpeza VIP.", timestamp:"21:15", insightRegistrado:false, insightTexto:"", insightResponsavel:"", faixaEtaria:"36-50", temporada:"2026" },
-      { id:12, show:"Coldplay", nota:3, feedback:"O show foi lindo, mas a saída do setor da arquibancada estava muito escura e perigosa. Quase caí na escada.", setor:"Arquibancada", pilar:"Segurança", satisfacao:"Médio", resumo:"Iluminação precária nas escadas de dispersão da arquibancada.", sugestao:"Instalar refletores de LED extras direcionados para a dispersão da arquibancada.", timestamp:"22:50", insightRegistrado:false, insightTexto:"", insightResponsavel:"", faixaEtaria:"18-25", temporada:"2026" },
-      { id:13, show:"Coldplay", nota:2, feedback:"Preços abusivos nos bares e poucas opções de alimentação para vegetarianos na pista.", setor:"Pista Premium", pilar:"A&B", satisfacao:"Crítico", resumo:"Insatisfação com preço de venda e diversidade no cardápio de comidas.", sugestao:"Negociar cardápios mais inclusivos e revisar margens de preços com operadores terceirizados.", timestamp:"20:30", insightRegistrado:false, insightTexto:"", insightResponsavel:"", faixaEtaria:"26-35", temporada:"2026" },
-      { id:14, show:"Ivete Sangalo", nota:4, feedback:"Segurança de dispersão muito ágil na pista. Som ótimo, sem ecos estranhos na Arena.", setor:"Pista Premium", pilar:"Segurança", satisfacao:"Excelente", resumo:"Dispersão ágil garantida por segurança operacional.", sugestao:"Manter posicionamento estratégico de guardas periféricos.", timestamp:"22:45", insightRegistrado:false, insightTexto:"", insightResponsavel:"", faixaEtaria:"18-25", temporada:"2025" },
-      { id:15, show:"Ivete Sangalo", nota:2, feedback:"Banheiro químico do Camarote vazando antes da metade do show. Cheiro horrível perto da área gourmet.", setor:"Camarote", pilar:"Manutenção", satisfacao:"Crítico", resumo:"Problema hidráulico e odor desagradável em sanitários VIP.", sugestao:"Realizar vistoria preventiva das bombas e encanamentos antes da abertura de portões.", timestamp:"21:00", insightRegistrado:false, insightTexto:"", insightResponsavel:"", faixaEtaria:"36-50", temporada:"2025" },
-      { id:16, show:"Ivete Sangalo", nota:2, feedback:"Bebidas quentes nos bares da arquibancada. Pagar caro para tomar cerveja quente é um absurdo.", setor:"Arquibancada", pilar:"A&B", satisfacao:"Crítico", resumo:"Logística falha no congelamento/armazenamento de bebidas na arquibancada.", sugestao:"Instalar contêineres térmicos com suprimento sobressalente de gelo nas copas internas.", timestamp:"20:25", insightRegistrado:false, insightTexto:"", insightResponsavel:"", faixaEtaria:"18-25", temporada:"2025" },
-      { id:17, show:"Ivete Sangalo", nota:4, feedback:"O som estava incrível na pista, mas a arquibancada treme com os pulos. Dá um certo medo, mas o staff explicou que é normal.", setor:"Arquibancada", pilar:"Operações", satisfacao:"Excelente", resumo:"Vibração estrutural gerando apreensão, mitigada pela segurança.", sugestao:"Colocar placas de comunicação explicando a flexibilidade estrutural e laudos de segurança visíveis.", timestamp:"21:35", insightRegistrado:false, insightTexto:"", insightResponsavel:"", faixaEtaria:"26-35", temporada:"2025" },
-      { id:18, show:"Ivete Sangalo", nota:3, feedback:"Som muito bom, mas sanitários com filas imensas e papel acabou rápido na Pista Premium.", setor:"Pista Premium", pilar:"Manutenção", satisfacao:"Médio", resumo:"Falta de insumos higiênicos básicos e filas no pilar sanitário.", sugestao:"Criar kits de reposição rápida para equipes volantes nos banheiros.", timestamp:"20:50", insightRegistrado:false, insightTexto:"", insightResponsavel:"", faixaEtaria:"36-50", temporada:"2025" },
-      { id:19, show:"Thiaguinho", nota:2, feedback:"O leitor de QR code da catraca de entrada travou e gerou uma fila enorme no sol de 30 minutos.", setor:"Arquibancada", pilar:"Ingressos", satisfacao:"Crítico", resumo:"Falha de hardware/software nas catracas eletrônicas na entrada.", sugestao:"Manter leitor de backup portátil pronto e resetar catracas preventivamente antes da abertura.", timestamp:"17:15", insightRegistrado:false, insightTexto:"", insightResponsavel:"", faixaEtaria:"18-25", temporada:"2026" },
-      { id:20, show:"Coldplay", nota:4, feedback:"A entrada com a pulseira de LED foi super rápida e sem filas. O stand comercial da Heineken estava bem legal.", setor:"Pista Premium", pilar:"Comercial", satisfacao:"Excelente", resumo:"Agilidade na distribuição e ativação comercial de patrocinador atrativa.", sugestao:"Replicar posicionamento do stand comercial para maximizar visibilidade.", timestamp:"18:20", insightRegistrado:false, insightTexto:"", insightResponsavel:"", faixaEtaria:"26-35", temporada:"2026" },
-      { id:21, show:"Kid Abelha", nota:3, feedback:"O telão de LED de fundo estava com alguns painéis apagados e piscando, atrapalhando a visualização.", setor:"Pista Premium", pilar:"Mídia", satisfacao:"Médio", resumo:"Falha técnica/hardware em painel de LED principal.", sugestao:"Testar módulos do painel com maior antecedência e calibrar conexões de recepção.", timestamp:"20:30", insightRegistrado:false, insightTexto:"", insightResponsavel:"", faixaEtaria:"36-50", temporada:"2025" },
-      { id:22, show:"Ivete Sangalo", nota:4, feedback:"Adoramos o painel de fotos montado no corredor. A equipe de marketing foi muito simpática.", setor:"Arquibancada", pilar:"Marketing", satisfacao:"Excelente", resumo:"Ação de marketing promocional bem avaliada.", sugestao:"Manter escala de promotores simpáticos e dinâmicos para atendimento fotográfico.", timestamp:"19:40", insightRegistrado:false, insightTexto:"", insightResponsavel:"", faixaEtaria:"18-25", temporada:"2025" }
-    ];
+    const SPREADSHEET_ID = "1zVm81X5DpxNFY9xk2c0ImJEd64Ey4FdxhUYIFDJ9grg";
+    const GID = "1199428332";
+    
+    // URL Fictícia padrão de Fallback
+    const DEFAULT_FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSf5u6W2Z8c8_mock_form_url/viewform";
 
     const officialSectors = ["Operações", "Comercial", "Mídia", "Marketing", "A&B", "Manutenção", "Segurança", "Camarote", "Ingressos"];
     const gdSectors = ["Operações", "Comercial", "A&B", "Manutenção", "Segurança", "Camarote", "Ingressos"];
@@ -872,8 +759,10 @@ function onFormSubmit(e) {
       { show:"Thiaguinho", nota:1, feedback:"Erro na leitura de ingressos na catraca do camarote gerou muita confusão no acesso VIP.", setor:"Camarote", pilar:"Ingressos", satisfacao:"Crítico", resumo:"Problema técnico em leitor digital de ingresso no setor Camarote.", sugestao:"Enviar assistente técnico com tablet sobressalente para liberação manual.", timestamp:"21:55", insightRegistrado:false, insightTexto:"", insightResponsavel:"", faixaEtaria:"26-35", temporada:"2026" },
       { show:"Coldplay", nota:4, feedback:"O telão de mídia lateral estava ótimo, muito claro de ver de longe.", setor:"Arquibancada", pilar:"Mídia", satisfacao:"Excelente", resumo:"Excelente qualidade visual e nitidez do telão.", sugestao:"Manter taxa de brilho configurada para eventos ao ar livre.", timestamp:"21:05", insightRegistrado:false, insightTexto:"", insightResponsavel:"", faixaEtaria:"36-50", temporada:"2026" },
       { show:"Ivete Sangalo", nota:5, feedback:"Comida incrível no stand comercial e atendimento muito simpático.", setor:"Pista Premium", pilar:"Comercial", satisfacao:"Excelente", resumo:"Ativação comercial de alimentos com alto padrão.", sugestao:"Manter parceria estratégica comercial.", timestamp:"21:48", insightRegistrado:false, insightTexto:"", insightResponsavel:"", faixaEtaria:"18-25", temporada:"2025" },
-      { show:"Kid Abelha", nota:2, feedback:"Os brindes do marketing acabaram no meio da fila, ficamos chateados.", setor:"Arquibancada", pilar:"Marketing", satisfacao:"Crítico", resumo:"Falta de estoque de brindes em ativação de marketing.", sugestao:"Redimensionar cota de brindes baseando-se no contingente da carga de ingressos.", timestamp:"22:55", insightRegistrado:false, insightTexto:"", insightResponsavel:"", faixaEtaria:"50+", temporada:"2025" }
+      { show:"Kid Abelha", nota:2, feedback:"Os brindes do marketing acabaram no meio da fila, ficamos chateados.", setor:"Arquibancada", pilar:"Marketing", satisfacao:"Crítico", resumo:"Falta de estoque de brindes inativação de marketing.", sugestao:"Redimensionar cota de brindes baseando-se no contingente da carga de ingressos.", timestamp:"22:55", insightRegistrado:false, insightTexto:"", insightResponsavel:"", faixaEtaria:"50+", temporada:"2025" }
     ];
+
+    let feedbackData = []; // Carregados dinamicamente
 
     // -----------------------------------------------------------
     // GLOBAL STATE
@@ -881,7 +770,7 @@ function onFormSubmit(e) {
     let currentTab = 1;
     let sessionInsightsCount = 0;
     let selectedInsightId = null;
-    let biMode = "correlation"; // "correlation" | "benchmark"
+    let biMode = "correlation";
 
     let timelineChart = null;
     let accessFlowChart = null;
@@ -894,8 +783,43 @@ function onFormSubmit(e) {
     // -----------------------------------------------------------
     window.addEventListener("DOMContentLoaded", () => {
       lucide.createIcons();
+      configureSurveyElements();
       initDashboard();
     });
+
+    // Configurar a URL ativa carregada da memória do navegador (localStorage)
+    function configureSurveyElements() {
+      const savedUrl = localStorage.getItem("active_survey_url") || DEFAULT_FORM_URL;
+      
+      const linkEl = document.getElementById("surveyLink");
+      const imgEl = document.getElementById("qrCodeImg");
+      const inputEl = document.getElementById("adminFormUrlInput");
+      
+      linkEl.href = savedUrl;
+      linkEl.innerText = savedUrl.substring(0, 48) + "...";
+      imgEl.src = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(savedUrl)}`;
+      inputEl.value = savedUrl === DEFAULT_FORM_URL ? "" : savedUrl;
+    }
+
+    // Salvar nova URL inserida pelo admin
+    function saveAdminFormUrl() {
+      const inputVal = document.getElementById("adminFormUrlInput").value.trim();
+      
+      if (!inputVal) {
+        localStorage.removeItem("active_survey_url");
+        showSystemToast("URL redefinida para o padrão de simulação.");
+      } else {
+        if (!inputVal.startsWith("http://") && !inputVal.startsWith("https://")) {
+          showSystemToast("Erro: A URL deve começar com http:// ou https://");
+          return;
+        }
+        localStorage.setItem("active_survey_url", inputVal);
+        showSystemToast("URL do formulário atualizada e salva com sucesso!");
+      }
+      
+      configureSurveyElements();
+      setTimeout(() => lucide.createIcons(), 50);
+    }
 
     function initDashboard() {
       const overlay = document.getElementById("loadingOverlay");
@@ -911,6 +835,10 @@ function onFormSubmit(e) {
           overlay.classList.add("hidden");
           console.warn("Sheet loading failed, using offline fallback data.", err);
           showSystemToast("Usando banco de dados local off-line (Simulado).");
+          
+          // Fallback mock data se der erro de CORS/Permissão no Sheets
+          loadLocalFallbackData();
+          
           updateShowDropdownOptions();
           setBiMode("correlation");
           refreshActiveTab();
@@ -918,10 +846,36 @@ function onFormSubmit(e) {
         });
     }
 
+    function loadLocalFallbackData() {
+      // Mock data local original
+      feedbackData = [
+        { id:1, show:"Thiaguinho", nota:5, feedback:"O som estava perfeito na pista premium! Deu pra ouvir cada detalhe dos instrumentos, e o artista deu um show espetacular.", setor:"Pista Premium", pilar:"Operações", satisfacao:"Excelente", resumo:"Elogio ao som e à performance acústica geral na Pista Premium.", sugestao:"Manter calibração do sistema de som nos mesmos parâmetros.", timestamp:"20:45", insightRegistrado:false, insightTexto:"", insightResponsavel:"", faixaEtaria:"26-35", temporada:"2026" },
+        { id:2, show:"Thiaguinho", nota:2, feedback:"Filas imensas nos bares da pista premium. Fiquei quase 40 minutos para conseguir comprar água mineral.", setor:"Pista Premium", pilar:"A&B", satisfacao:"Crítico", resumo:"Reclamação de atraso no atendimento e formação de filas longas nos caixas.", sugestao:"Aumentar número de caixas móveis e equipe de bar em eventos de alta demanda.", timestamp:"20:55", insightRegistrado:false, insightTexto:"", insightResponsavel:"", faixaEtaria:"18-25", temporada:"2026" },
+        { id:3, show:"Thiaguinho", nota:1, feedback:"Os banheiros da arquibancada estavam imundos e sem água nas pias já no meio do show. Situação insuportável.", setor:"Arquibancada", pilar:"Manutenção", satisfacao:"Crítico", resumo:"Falta de higiene e desabastecimento de água nas torneiras do setor.", sugestao:"Reforçar equipe de limpeza volante e garantir abastecimento constante de caminhão pipa.", timestamp:"21:10", insightRegistrado:false, insightTexto:"", insightResponsavel:"", faixaEtaria:"36-50", temporada:"2026" },
+        { id:4, show:"Thiaguinho", nota:3, feedback:"A segurança na entrada foi muito confusa, filas se misturando na calçada. Mas lá dentro o acesso estava fluindo.", setor:"Arquibancada", pilar:"Segurança", satisfacao:"Médio", resumo:"Confusão e lentidão na organização das filas externas de acesso.", sugestao:"Instalar grades de contenção extras e sinalização clara dos setores na calçada externa.", timestamp:"18:40", insightRegistrado:false, insightTexto:"", insightResponsavel:"", faixaEtaria:"26-35", temporada:"2026" },
+        { id:5, show:"Thiaguinho", nota:4, feedback:"O camarote tem uma vista ótima e serviço rápido, porém o som do palco secundário estava embolando um pouco.", setor:"Camarote", pilar:"Camarote", satisfacao:"Excelente", resumo:"Boa experiência de camarote, com ressalvas de propagação sonora secundária.", sugestao:"Ajustar caixas de reforço (delay line) direcionadas para a área dos camarotes.", timestamp:"21:20", insightRegistrado:false, insightTexto:"", insightResponsavel:"", faixaEtaria:"26-35", temporada:"2026" },
+        { id:6, show:"Kid Abelha", nota:5, feedback:"Que show maravilhoso! Muito bem organizado, banheiros impecáveis e atendimento super rápido nos bares.", setor:"Camarote", pilar:"Camarote", satisfacao:"Excelente", resumo:"Elogio à organização geral, limpeza de banheiros e rapidez de bar VIP.", sugestao:"Replicar modelo operacional de limpeza adotado neste setor para toda a Arena.", timestamp:"21:30", insightRegistrado:false, insightTexto:"", insightResponsavel:"", faixaEtaria:"50+", temporada:"2025" },
+        { id:7, show:"Kid Abelha", nota:2, feedback:"Na arquibancada o som estava excessivamente baixo. Quem ficou na parte superior não ouvia bem os vocais.", setor:"Arquibancada", pilar:"Operações", satisfacao:"Crítico", resumo:"Volume de som insuficiente na cobertura superior da arquibancada.", sugestao:"Redirecionar os line arrays de alta cobertura para atingir o topo da arquibancada.", timestamp:"20:50", insightRegistrado:false, insightTexto:"", insightResponsavel:"", faixaEtaria:"36-50", temporada:"2025" },
+        { id:8, show:"Kid Abelha", nota:3, feedback:"A segurança demorou muito para revistar a galera na entrada. Entramos com o show já começado.", setor:"Pista Premium", pilar:"Segurança", satisfacao:"Médio", resumo:"Revista lenta provocando atraso na entrada do público.", sugestao:"Aumentar quantidade de portões detectores e readequar a escala de segurança de entrada.", timestamp:"19:15", insightRegistrado:false, insightTexto:"", insightResponsavel:"", faixaEtaria:"26-35", temporada:"2025" },
+        { id:9, show:"Kid Abelha", nota:4, feedback:"Bares organizados e sem muita fila. O refrigerante podia estar mais gelado, mas foi boa a experiência.", setor:"Pista Premium", pilar:"A&B", satisfacao:"Excelente", resumo:"Atendimento aceitável com leve ressalva sobre temperatura das bebidas.", sugestao:"Verificar freezers das ilhas internas e otimizar reabastecimento de gelo.", timestamp:"20:10", insightRegistrado:false, insightTexto:"", insightResponsavel:"", faixaEtaria:"18-25", temporada:"2025" },
+        { id:10, show:"Coldplay", nota:5, feedback:"Incrível! Tudo impecável. Segurança super atenciosa, som perfeito em todos os cantos e bares muito rápidos.", setor:"Pista Premium", pilar:"Segurança", satisfacao:"Excelente", resumo:"Excelência em segurança de contenção, clareza sonora e velocidade nos bares.", sugestao:"Manter padrão operacional internacional adotado neste show de alta performance.", timestamp:"21:40", insightRegistrado:false, insightTexto:"", insightResponsavel:"", faixaEtaria:"26-35", temporada:"2026" },
+        { id:11, show:"Coldplay", nota:5, feedback:"A estrutura do camarote estava sensacional. Banheiros higienizados de minuto em minuto e som cristalino.", setor:"Camarote", pilar:"Camarote", satisfacao:"Excelente", resumo:"Avaliação máxima de banheiros e som no setor de Camarotes.", sugestao:"Continuar com os mesmos fornecedores terceirizados de limpeza VIP.", timestamp:"21:15", insightRegistrado:false, insightTexto:"", insightResponsavel:"", faixaEtaria:"36-50", temporada:"2026" },
+        { id:12, show:"Coldplay", nota:3, feedback:"O show foi lindo, mas a saída do setor da arquibancada estava muito escura e perigosa. Quase caí na escada.", setor:"Arquibancada", pilar:"Segurança", satisfacao:"Médio", resumo:"Iluminação precária nas escadas de dispersão da arquibancada.", sugestao:"Instalar refletores de LED extras direcionados para a dispersão da arquibancada.", timestamp:"22:50", insightRegistrado:false, insightTexto:"", insightResponsavel:"", faixaEtaria:"18-25", temporada:"2026" },
+        { id:13, show:"Coldplay", nota:2, feedback:"Preços abusivos nos bares e poucas opções de alimentação para vegetarianos na pista.", setor:"Pista Premium", pilar:"A&B", satisfacao:"Crítico", resumo:"Insatisfação com preço de venda e diversidade no cardápio de comidas.", sugestao:"Negociar cardápios mais inclusivos e revisar margens de preços com operadores terceirizados.", timestamp:"20:30", insightRegistrado:false, insightTexto:"", insightResponsavel:"", faixaEtaria:"26-35", temporada:"2026" },
+        { id:14, show:"Ivete Sangalo", nota:4, feedback:"Segurança de dispersão muito ágil na pista. Som ótimo, sem ecos estranhos na Arena.", setor:"Pista Premium", pilar:"Segurança", satisfacao:"Excelente", resumo:"Dispersão ágil garantida por segurança operacional.", sugestao:"Manter posicionamento estratégico de guardas periféricos.", timestamp:"22:45", insightRegistrado:false, insightTexto:"", insightResponsavel:"", faixaEtaria:"18-25", temporada:"2025" },
+        { id:15, show:"Ivete Sangalo", nota:2, feedback:"Banheiro químico do Camarote vazando antes da metade do show. Cheiro horrível perto da área gourmet.", setor:"Camarote", pilar:"Manutenção", satisfacao:"Crítico", resumo:"Problema hidráulico e odor desagradável em sanitários VIP.", sugestao:"Realizar vistoria preventiva das bombas e encanamentos antes da abertura de portões.", timestamp:"21:00", insightRegistrado:false, insightTexto:"", insightResponsavel:"", faixaEtaria:"36-50", temporada:"2025" },
+        { id:16, show:"Ivete Sangalo", nota:2, feedback:"Bebidas quentes nos bares da arquibancada. Pagar caro para tomar cerveja quente é um absurdo.", setor:"Arquibancada", pilar:"A&B", satisfacao:"Crítico", resumo:"Logística falha no congelamento/armazenamento de bebidas na arquibancada.", sugestao:"Instalar contêineres térmicos com suprimento sobressalente de gelo nas copas internas.", timestamp:"20:25", insightRegistrado:false, insightTexto:"", insightResponsavel:"", faixaEtaria:"18-25", temporada:"2025" },
+        { id:17, show:"Ivete Sangalo", nota:4, feedback:"O som estava incrível na pista, mas a arquibancada treme com os pulos. Dá um certo medo, mas o staff explicou que é normal.", setor:"Arquibancada", pilar:"Operações", satisfacao:"Excelente", resumo:"Vibração estrutural gerando apreensão, mitigada pela segurança.", sugestao:"Colocar placas de comunicação explicando a flexibilidade estrutural e laudos de segurança visíveis.", timestamp:"21:35", insightRegistrado:false, insightTexto:"", insightResponsavel:"", faixaEtaria:"26-35", temporada:"2025" },
+        { id:18, show:"Ivete Sangalo", nota:3, feedback:"Som muito bom, mas sanitários com filas imensas e papel acabou rápido na Pista Premium.", setor:"Pista Premium", pilar:"Manutenção", satisfacao:"Médio", resumo:"Falta de insumos higiênicos básicos e filas no pilar sanitário.", sugestao:"Criar kits de reposição rápida para equipes volantes nos banheiros.", timestamp:"20:50", insightRegistrado:false, insightTexto:"", insightResponsavel:"", faixaEtaria:"36-50", temporada:"2025" },
+        { id:19, show:"Thiaguinho", nota:2, feedback:"O leitor de QR code da catraca de entrada travou e gerou uma fila enorme no sol de 30 minutos.", setor:"Arquibancada", pilar:"Ingressos", satisfacao:"Crítico", resumo:"Falha de hardware/software nas catracas eletrônicas na entrada.", sugestao:"Manter leitor de backup portátil pronto e resetar catracas preventivamente antes da abertura.", timestamp:"17:15", insightRegistrado:false, insightTexto:"", insightResponsavel:"", faixaEtaria:"18-25", temporada:"2026" },
+        { id:20, show:"Coldplay", nota:4, feedback:"A entrada com a pulseira de LED foi super rápida e sem filas. O stand comercial da Heineken estava bem legal.", setor:"Pista Premium", pilar:"Comercial", satisfacao:"Excelente", resumo:"Agilidade na distribuição e ativação comercial de patrocinador atrativa.", sugestao:"Replicar posicionamento do stand comercial para maximizar visibilidade.", timestamp:"18:20", insightRegistrado:false, insightTexto:"", insightResponsavel:"", faixaEtaria:"26-35", temporada:"2026" },
+        { id:21, show:"Kid Abelha", nota:3, feedback:"O telão de LED de fundo estava com alguns painéis apagados e piscando, atrapalhando a visualização.", setor:"Pista Premium", pilar:"Mídia", satisfacao:"Médio", resumo:"Falha técnica/hardware em painel de LED principal.", sugestao:"Testar módulos do painel com maior antecedência e calibrar conexões de recepção.", timestamp:"20:30", insightRegistrado:false, insightTexto:"", insightResponsavel:"", faixaEtaria:"36-50", temporada:"2025" },
+        { id:22, show:"Ivete Sangalo", nota:4, feedback:"Adoramos o painel de fotos montado no corredor. A equipe de marketing foi muito simpática.", setor:"Arquibancada", pilar:"Marketing", satisfacao:"Excelente", resumo:"Ação de marketing promocional bem avaliada.", sugestao:"Manter escala de promotores simpáticos e dinâmicos para atendimento fotográfico.", timestamp:"19:40", insightRegistrado:false, insightTexto:"", insightResponsavel:"", faixaEtaria:"18-25", temporada:"2025" }
+      ];
+    }
+
     function loadDataFromGoogleSheet() {
-      const spreadsheetId = "1zVm81X5DpxNFY9xk2c0ImJEd64Ey4FdxhUYIFDJ9grg";
-      const gid = "1199428332";
-      const url = `https://docs.google.com/spreadsheets/d/${spreadsheetId}/gviz/tq?tqx=out:json&gid=${gid}`;
+      const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&gid=${GID}`;
 
       return fetch(url)
         .then(res => {
@@ -939,7 +893,7 @@ function onFormSubmit(e) {
           
           if (!rows || rows.length === 0) return;
 
-          // Encontrar os índices corretos dinamicamente baseando-se nos cabeçalhos
+          // Encontrar os índices corretos dinamicamente
           let idxTimestamp = 0;
           let idxShow = 1;
           let idxNota = 2;
@@ -993,7 +947,7 @@ function onFormSubmit(e) {
 
             let pilar = getValue(idxPilar) || "Operações";
             if (!officialSectors.includes(pilar)) {
-              pilar = "Operações"; // Fallback se não bater com nenhum dos 9 oficiais
+              pilar = "Operações";
             }
 
             const resumo = getValue(idxResumo) || "Análise executiva de IA em processamento...";
@@ -1031,7 +985,6 @@ function onFormSubmit(e) {
           });
 
           if (parsedData.length > 0) {
-            // Reverter para que os feedbacks mais novos (fim da planilha) apareçam primeiro no feed
             feedbackData = parsedData.reverse();
           }
         });
@@ -1109,11 +1062,18 @@ function onFormSubmit(e) {
         document.getElementById(`tabBtn${n}`).className = inactiveClass;
         document.getElementById(`tabContent${n}`).classList.add("hidden");
         document.getElementById(`tabContent${n}`).classList.remove("block");
+        if (n === 5) {
+          document.getElementById(`tabContent${n}`).classList.remove("flex");
+        }
       });
 
       document.getElementById(`tabBtn${tabNumber}`).className = activeClass;
       document.getElementById(`tabContent${tabNumber}`).classList.remove("hidden");
-      document.getElementById(`tabContent${tabNumber}`).classList.add("block");
+      if (tabNumber === 5) {
+        document.getElementById(`tabContent${tabNumber}`).classList.add("flex");
+      } else {
+        document.getElementById(`tabContent${tabNumber}`).classList.add("block");
+      }
 
       refreshActiveTab();
       setTimeout(() => lucide.createIcons(), 50);
@@ -1133,7 +1093,6 @@ function onFormSubmit(e) {
         refreshActiveTab();
         showLiveToast(newFb);
         
-        // Exibir badge temporária de novo feedback
         const badge = document.getElementById("newFeedbackBadge");
         if (badge) {
           badge.classList.remove("hidden");
@@ -1237,7 +1196,7 @@ function onFormSubmit(e) {
         starsContainer.innerHTML = "<span class='text-slate-600 font-semibold'>Aguardando dados...</span>";
       }
 
-      // Cálculo de Capacidade Dinâmica baseada nos filtros
+      // Cálculo de Capacidade Dinâmica
       const showCapacities = {
         "Thiaguinho": { access: 12450, issued: 15000 },
         "Kid Abelha": { access: 8800, issued: 10000 },
@@ -1869,33 +1828,6 @@ function onFormSubmit(e) {
       });
 
       lucide.createIcons();
-    }
-
-    // -----------------------------------------------------------
-    // COPIAR SCRIPT (ABA 5)
-    // -----------------------------------------------------------
-    function copyAppsScript() {
-      const codeElement = document.getElementById("appsScriptCode");
-      const text = codeElement.innerText;
-      
-      navigator.clipboard.writeText(text).then(() => {
-        const copyText = document.getElementById("copyText");
-        const copyIcon = document.getElementById("copyIcon");
-        
-        copyText.innerText = "Copiado!";
-        copyIcon.setAttribute("data-lucide", "check");
-        lucide.createIcons();
-        
-        showSystemToast("Código copiado para a área de transferência.");
-        
-        setTimeout(() => {
-          copyText.innerText = "Copiar";
-          copyIcon.setAttribute("data-lucide", "copy");
-          lucide.createIcons();
-        }, 2000);
-      }).catch(err => {
-        showSystemToast("Erro ao copiar o código. Por favor selecione manualmente.");
-      });
     }
   </script>
 </body>
