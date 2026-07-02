@@ -953,15 +953,25 @@
           cols.forEach((col, index) => {
             if (!col) return;
             const label = (col.label || "").toLowerCase().trim();
-            if (label.includes("data") || label.includes("timestamp") || label.includes("carimbo")) idxTimestamp = index;
-            else if (label.includes("show") || label.includes("evento")) idxShow = index;
-            else if (label.includes("nota") || label.includes("avalia") || label.includes("experiên")) idxNota = index;
-            else if (label.includes("feedback") || label.includes("detalhes") || label.includes("coment")) idxFeedback = index;
-            else if (label.includes("setor f") || label.includes("onde assistiu") || label.includes("setor físico")) idxSetor = index;
-            else if (label.includes("faixa") || label.includes("idade")) idxFaixaEtaria = index;
-            else if (label.includes("pilar") || label.includes("departamento") || label.includes("setor operacional") || label.includes("ia")) idxPilar = index;
-            else if (label.includes("resumo")) idxResumo = index;
-            else if (label.includes("sugest") || label.includes("otimiza")) idxSugestao = index;
+            if (label.includes("data") || label.includes("timestamp") || label.includes("carimbo")) {
+              idxTimestamp = index;
+            } else if (label.includes("nota") || label.includes("avalia") || label.includes("experiên")) {
+              idxNota = index;
+            } else if (label.includes("show") || label.includes("evento")) {
+              idxShow = index;
+            } else if (label.includes("feedback") || label.includes("detalhes") || label.includes("coment")) {
+              idxFeedback = index;
+            } else if (label.includes("setor f") || label.includes("onde assistiu") || label.includes("setor físico")) {
+              idxSetor = index;
+            } else if (label.includes("faixa") || label.includes("idade")) {
+              idxFaixaEtaria = index;
+            } else if (label.includes("pilar") || label.includes("departamento") || label.includes("setor operacional") || label.includes("ia")) {
+              idxPilar = index;
+            } else if (label.includes("resumo")) {
+              idxResumo = index;
+            } else if (label.includes("sugest") || label.includes("otimiza")) {
+              idxSugestao = index;
+            }
           });
 
           const parsedData = rows.map((row, rIdx) => {
