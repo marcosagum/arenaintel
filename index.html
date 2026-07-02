@@ -615,25 +615,36 @@
         </div>
       </div>
 
-      <!-- Configuração da URL (Exclusivo Administradores) -->
+      <!-- Configuração da URL e GID (Exclusivo Administradores) -->
       <div class="bg-card-bg border border-card-border p-5 rounded-xl corporate-shadow max-w-2xl w-full">
         <details class="group">
           <summary class="text-xs font-bold text-slate-400 hover:text-slate-300 cursor-pointer select-none flex items-center justify-between list-none">
             <span class="flex items-center gap-2">
               <i data-lucide="settings" class="h-4 w-4 text-slate-500 group-open:text-brand-red transition-colors"></i>
-              Painel do Administrador: Trocar Formulário de Captura
+              Painel do Administrador: Trocar Formulário e Aba da Planilha
             </span>
             <i data-lucide="chevron-down" class="h-4 w-4 text-slate-500 transition-transform group-open:rotate-180"></i>
           </summary>
           
-          <div class="mt-4 pt-4 border-t border-card-border/60 space-y-3.5">
+          <div class="mt-4 pt-4 border-t border-card-border/60 space-y-4">
             <p class="text-[10px] text-slate-400 leading-normal">
-              Se você criar um novo Google Forms para o próximo show, cole o link dele abaixo para atualizar o QR Code do totem imediatamente. O link fica gravado na memória deste computador.
+              Sempre que você criar um novo formulário na planilha (como Maroon 5 ou Djavan), o Google cria uma nova aba. Insira a URL do novo Forms e o GID da nova aba (número no final da URL da planilha após <code>#gid=</code>) para atualizar o dashboard e o QR Code.
             </p>
-            <div class="flex gap-2">
-              <input type="text" id="adminFormUrlInput" class="flex-1 bg-[#121417] border border-card-border rounded-lg px-3 py-2 text-xs text-white placeholder-slate-600 focus:outline-none focus:border-brand-red" placeholder="Cole o link de responder do Google Forms (ex: https://docs.google.com/forms/...)">
-              <button onclick="saveAdminFormUrl()" class="bg-brand-red hover:bg-brand-red-hover text-xs font-bold text-white px-4 py-2 rounded-lg transition-all flex items-center gap-1.5">
-                <i data-lucide="save" class="h-3.5 w-3.5"></i> Salvar URL
+            
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <div class="sm:col-span-2 space-y-1.5">
+                <label for="adminFormUrlInput" class="text-[9px] uppercase font-bold text-slate-500 tracking-wider">Link de Resposta do Google Forms</label>
+                <input type="text" id="adminFormUrlInput" class="w-full bg-[#121417] border border-card-border rounded-lg px-3 py-2 text-xs text-white placeholder-slate-600 focus:outline-none focus:border-brand-red" placeholder="https://docs.google.com/forms/...">
+              </div>
+              <div class="space-y-1.5">
+                <label for="adminGidInput" class="text-[9px] uppercase font-bold text-slate-500 tracking-wider">GID da nova Aba (Sheets)</label>
+                <input type="text" id="adminGidInput" class="w-full bg-[#121417] border border-card-border rounded-lg px-3 py-2 text-xs text-white placeholder-slate-600 focus:outline-none focus:border-brand-red" placeholder="Ex: 1199428332">
+              </div>
+            </div>
+            
+            <div class="flex justify-end">
+              <button onclick="saveAdminSettings()" class="bg-brand-red hover:bg-brand-red-hover text-xs font-bold text-white px-5 py-2.5 rounded-lg transition-all flex items-center gap-1.5 corporate-shadow">
+                <i data-lucide="save" class="h-3.5 w-3.5"></i> Salvar Configurações
               </button>
             </div>
           </div>
@@ -740,7 +751,7 @@
     // DATABASE: PLANILHA E GOOGLE FORMS
     // -----------------------------------------------------------
     const SPREADSHEET_ID = "1zVm81X5DpxNFY9xk2c0ImJEd64Ey4FdxhUYIFDJ9grg";
-    const GID = "1199428332";
+    const DEFAULT_GID = "1199428332";
     
     // URL Fictícia padrão de Fallback
     const DEFAULT_FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSf5u6W2Z8c8_mock_form_url/viewform";
@@ -794,37 +805,64 @@
       initDashboard();
     });
 
-    // Configurar a URL ativa carregada da memória do navegador (localStorage)
+    // Configurar a URL e GID carregados da memória do navegador (localStorage)
     function configureSurveyElements() {
       const savedUrl = localStorage.getItem("active_survey_url") || DEFAULT_FORM_URL;
+      const savedGid = localStorage.getItem("active_spreadsheet_gid") || DEFAULT_GID;
       
       const linkEl = document.getElementById("surveyLink");
       const imgEl = document.getElementById("qrCodeImg");
       const inputEl = document.getElementById("adminFormUrlInput");
+      const gidInputEl = document.getElementById("adminGidInput");
       
       linkEl.href = savedUrl;
       linkEl.innerText = savedUrl.substring(0, 48) + "...";
       imgEl.src = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(savedUrl)}`;
       inputEl.value = savedUrl === DEFAULT_FORM_URL ? "" : savedUrl;
+      gidInputEl.value = savedGid === DEFAULT_GID ? "" : savedGid;
     }
 
-    // Salvar nova URL inserida pelo admin
-    function saveAdminFormUrl() {
-      const inputVal = document.getElementById("adminFormUrlInput").value.trim();
+    // Salvar novas configurações inseridas pelo admin
+    function saveAdminSettings() {
+      const inputUrlVal = document.getElementById("adminFormUrlInput").value.trim();
+      const inputGidVal = document.getElementById("adminGidInput").value.trim();
       
-      if (!inputVal) {
+      // Salvar URL
+      if (!inputUrlVal) {
         localStorage.removeItem("active_survey_url");
-        showSystemToast("URL redefinida para o padrão de simulação.");
       } else {
-        if (!inputVal.startsWith("http://") && !inputVal.startsWith("https://")) {
+        if (!inputUrlVal.startsWith("http://") && !inputUrlVal.startsWith("https://")) {
           showSystemToast("Erro: A URL deve começar com http:// ou https://");
           return;
         }
-        localStorage.setItem("active_survey_url", inputVal);
-        showSystemToast("URL do formulário atualizada e salva com sucesso!");
+        localStorage.setItem("active_survey_url", inputUrlVal);
+      }
+
+      // Salvar GID
+      if (!inputGidVal) {
+        localStorage.removeItem("active_spreadsheet_gid");
+      } else {
+        localStorage.setItem("active_spreadsheet_gid", inputGidVal);
       }
       
+      showSystemToast("Configurações salvas! Recarregando banco de dados...");
       configureSurveyElements();
+      
+      // Recarregar os dados da planilha e atualizar a tela
+      const overlay = document.getElementById("loadingOverlay");
+      overlay.classList.remove("hidden");
+      
+      loadDataFromGoogleSheet()
+        .then(() => {
+          overlay.classList.add("hidden");
+          updateShowDropdownOptions();
+          refreshActiveTab();
+        })
+        .catch(err => {
+          overlay.classList.add("hidden");
+          showSystemToast("Erro ao carregar dados do novo GID. Verifique os valores.");
+        });
+      
       setTimeout(() => lucide.createIcons(), 50);
     }
 
@@ -882,7 +920,8 @@
     }
 
     function loadDataFromGoogleSheet() {
-      const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&gid=${GID}`;
+      const activeGid = localStorage.getItem("active_spreadsheet_gid") || DEFAULT_GID;
+      const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&gid=${activeGid}`;
 
       return fetch(url)
         .then(res => {
