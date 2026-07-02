@@ -903,48 +903,23 @@
     }
 
     function loadDataFromGoogleSheet() {
-      // 1. Tentar fazer a varredura automática de abas via htmlview + CORS Proxy
-      const htmlviewUrl = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/htmlview`;
-      const proxyUrl = `https://corsproxy.io/?` + encodeURIComponent(htmlviewUrl);
+      const sheetsToFetch = [
+        { name: "Dados_Consolidados", gid: "1990980990" },
+        { name: "John Mayer", gid: "468647452" },
+        { name: "Maroon 5", gid: "787639970" },
+        { name: "DJAVAN", gid: "1199428332" },
+        { name: "Kid abelha", gid: "1059413920" },
+        { name: "SEU JORGE", gid: "766118987" },
+        { name: "Ivete sangalo", gid: "1762522235" },
+        { name: "Resenha do mumuzinho", gid: "47339368" },
+        { name: "Disney on Ice", gid: "1199472952" },
+        { name: "Thiaguinho", gid: "253630660" }
+      ];
 
-      return fetch(proxyUrl)
-        .then(res => {
-          if (!res.ok) throw new Error("Erro ao acessar proxy CORS.");
-          return res.text();
-        })
-        .then(htmlText => {
-          let content = htmlText;
-          try {
-            const parsed = JSON.parse(htmlText);
-            if (parsed && parsed.contents) {
-              content = parsed.contents;
-            }
-          } catch(e) {}
-
-          const items = [];
-          const regex = /name:\s*["']([^"']+)["'][^{}]*gid:\s*["']([^"']+)["']/g;
-          let match;
-          while ((match = regex.exec(content)) !== null) {
-            items.push({ name: match[1], gid: match[2] });
-          }
-
-          let sheetsToFetch = [];
-          if (items.length > 0) {
-            console.log("Abas descobertas na planilha:", items);
-            const ignoreList = ["config", "dashboard", "home", "painel", "protótipo", "dados_consolidados", "consolidado"];
-            sheetsToFetch = items.filter(item => !ignoreList.some(ignored => item.name.toLowerCase().includes(ignored)));
-          }
-
-          if (sheetsToFetch.length === 0) {
-            sheetsToFetch = [{ name: "Thiaguinho", gid: DEFAULT_GID }];
-          }
-
-          return fetchGidsAndConsolidate(sheetsToFetch);
-        })
-        .catch(err => {
-          console.warn("Falha na varredura automática de abas, usando GID padrão.", err);
-          return fetchGidsAndConsolidate([{ name: "Thiaguinho", gid: DEFAULT_GID }]);
-        });
+      return fetchGidsAndConsolidate(sheetsToFetch).catch(err => {
+        console.warn("Falha no carregamento dinâmico, usando fallback off-line.", err);
+        loadLocalFallbackData();
+      });
     }
 
     function fetchGidsAndConsolidate(sheets) {
@@ -965,13 +940,14 @@
           })
           .catch(err => {
             console.warn(`Falha ao carregar aba ${sheetName}:`, err);
-            return null;
+            return null; // Retorna null para abas que falharem (ex: deletadas)
           });
       });
 
       return Promise.all(fetchPromises)
         .then(results => {
           let consolidatedRows = [];
+          let uniqueKeys = new Set();
           
           results.forEach(result => {
             if (!result || !result.json || !result.json.table || !result.json.table.rows) return;
@@ -987,7 +963,7 @@
             let idxShow = -1; // -1 indica que não encontramos coluna explícita de show
             let idxNota = 2;
             let idxFeedback = 3;
-            let idxSetor = 4;
+            let idxSetor = -1;
             let idxFaixaEtaria = 5;
             let idxPilar = -1;
             let idxResumo = -1;
@@ -1001,7 +977,6 @@
               } else if (label.includes("nota") || label.includes("avalia") || label.includes("experiên")) {
                 idxNota = colIndex;
               } else if (label.includes("show") || label.includes("evento")) {
-                // Evitar mapear como show se for coluna de avaliação ou setor
                 if (!label.includes("avalia") && !label.includes("experiên") && !label.includes("setor")) {
                   idxShow = colIndex;
                 }
@@ -1019,6 +994,20 @@
                 idxSugestao = colIndex;
               }
             });
+
+            // Fallback inteligente para Setor: escanear os valores se a coluna não foi rotulada como "setor"
+            if (idxSetor === -1) {
+              for (let colIdx = 0; colIdx < cols.length; colIdx++) {
+                const sampleValues = rows.slice(0, 5).map(r => {
+                  const cells = r.c || [];
+                  return cells[colIdx] && cells[colIdx].v ? cells[colIdx].v.toString().toLowerCase() : "";
+                });
+                if (sampleValues.some(val => val.includes("pista") || val.includes("arquibancada") || val.includes("camarote"))) {
+                  idxSetor = colIdx;
+                  break;
+                }
+              }
+            }
 
             rows.forEach((row, rIdx) => {
               const cells = row.c || [];
@@ -1046,7 +1035,6 @@
               if (idxShow !== -1) {
                 show = getValue(idxShow);
               }
-              // Fallback para o nome da aba se a célula ou a coluna de show não existirem
               if (!show) {
                 show = sheetName;
               }
@@ -1056,6 +1044,11 @@
               const feedback = getValue(idxFeedback) || "";
               const setor = getValue(idxSetor) || "Pista Premium";
               const faixaEtaria = getValue(idxFaixaEtaria) || "26-35";
+
+              // Chave de desduplicação
+              const uniqueKey = `${show.toLowerCase()}_${rawTimestamp.toString()}_${setor.toLowerCase()}_${feedback.substring(0, 30).toLowerCase()}`;
+              if (uniqueKeys.has(uniqueKey)) return;
+              uniqueKeys.add(uniqueKey);
 
               let pilar = getValue(idxPilar) || "Operações";
               if (!officialSectors.includes(pilar)) {
