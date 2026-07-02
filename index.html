@@ -179,7 +179,7 @@
       </nav>
 
       <!-- GLOBAL FILTERS (Season & Show) - Now Prominently Placed Near Content -->
-      <div class="flex flex-wrap items-center gap-3 bg-card-bg p-1.5 rounded-xl border border-card-border corporate-shadow">
+      <div class="flex flex-wrap items-center gap-3 bg-card-bg p-2 rounded-xl border border-card-border corporate-shadow">
         
         <div class="flex items-center gap-1.5 px-2 text-slate-400">
           <i data-lucide="filter" class="h-4 w-4 text-brand-red"></i>
@@ -187,16 +187,26 @@
         </div>
 
         <!-- Seletor de Temporada -->
-        <select id="seasonSelect" class="bg-[#121417] border border-card-border rounded-lg px-4 py-2 text-xs font-bold text-white focus:outline-none focus:border-brand-red cursor-pointer min-w-[130px]" onchange="onSeasonChange()">
-          <option value="Todas">Temporada: Todas</option>
-          <option value="2026">Temporada 2026</option>
-          <option value="2025">Temporada 2025</option>
-        </select>
+        <div class="relative min-w-[150px]">
+          <select id="seasonSelect" class="w-full bg-[#121417] hover:bg-[#16191E] border border-card-border hover:border-slate-600 rounded-lg pl-4 pr-10 py-2 text-xs font-bold text-white focus:outline-none focus:border-brand-red cursor-pointer appearance-none transition-all" onchange="onSeasonChange()">
+            <option value="Todas">Temporada: Todas</option>
+            <option value="2026">Temporada 2026</option>
+            <option value="2025">Temporada 2025</option>
+          </select>
+          <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-slate-400">
+            <i data-lucide="chevron-down" class="h-3.5 w-3.5"></i>
+          </div>
+        </div>
 
         <!-- Seletor de Show (TOTALMENTE DINÂMICO) -->
-        <select id="showSelect" class="bg-[#121417] border border-card-border rounded-lg px-4 py-2 text-xs font-bold text-white focus:outline-none focus:border-brand-red cursor-pointer min-w-[200px]" onchange="refreshActiveTab()">
-          <option value="Todos">Carregando shows...</option>
-        </select>
+        <div class="relative min-w-[220px]">
+          <select id="showSelect" class="w-full bg-[#121417] hover:bg-[#16191E] border border-card-border hover:border-slate-600 rounded-lg pl-4 pr-10 py-2 text-xs font-bold text-white focus:outline-none focus:border-brand-red cursor-pointer appearance-none transition-all" onchange="refreshActiveTab()">
+            <option value="Todos">Carregando shows...</option>
+          </select>
+          <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-slate-400">
+            <i data-lucide="chevron-down" class="h-3.5 w-3.5"></i>
+          </div>
+        </div>
 
       </div>
 
@@ -401,17 +411,11 @@
     <!-- TAB 3: CONSOLIDAÇÃO GD DIÁRIO -->
     <!-- ============================================== -->
     <div id="tabContent3" class="space-y-6 hidden">
-      <div class="bg-card-bg border border-card-border p-5 rounded-xl flex flex-col md:flex-row items-center justify-between gap-4 corporate-shadow">
-        <div>
-          <h2 class="text-base font-bold text-white uppercase tracking-wider flex items-center gap-2">
-            <i data-lucide="clipboard-check" class="h-5 w-5 text-brand-red"></i>
-            Reunião de Alinhamento e Fechamento (GD Quarta-Feira)
-          </h2>
-          <p class="text-xs text-slate-400 mt-1">
-            Análise consolidada por setor operacional — Marketing e Mídia excluídos (não operacionais de entrega direta).
-          </p>
-        </div>
-        <span class="text-[10px] uppercase font-bold text-brand-red tracking-widest bg-brand-red/10 px-3 py-1.5 rounded border border-brand-red/20 font-mono">7 SETORES OPERACIONAIS</span>
+      <div class="bg-card-bg border border-card-border p-5 rounded-xl flex items-center justify-between gap-4 corporate-shadow">
+        <h2 class="text-base font-bold text-white uppercase tracking-wider flex items-center gap-2">
+          <i data-lucide="clipboard-check" class="h-5 w-5 text-brand-red"></i>
+          Alinhamento e Fechamento
+        </h2>
       </div>
       <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6" id="gdBlocksGrid"></div>
     </div>
@@ -556,9 +560,21 @@
 
         <!-- Grouped Bar Chart -->
         <div class="bg-card-bg border border-card-border p-5 rounded-xl flex flex-col h-[480px] corporate-shadow">
-          <h3 class="text-sm font-bold text-white uppercase tracking-wider mb-4 border-b border-card-border pb-3 flex items-center gap-1.5">
-            <i data-lucide="bar-chart" class="h-4.5 w-4.5 text-brand-red"></i> Comparativo de Notas de Satisfação (Evolução)
-          </h3>
+          <div class="flex items-center justify-between mb-4 border-b border-card-border pb-3 flex-wrap gap-2">
+            <h3 class="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-1.5">
+              <i data-lucide="bar-chart" class="h-4.5 w-4.5 text-brand-red"></i> Notas de Evolução
+            </h3>
+            <!-- Filtro de Métrica (Média de Notas vs Total de Feedbacks) -->
+            <div class="relative min-w-[175px]">
+              <select id="benchmarkMetricSelect" class="w-full bg-[#121417] hover:bg-[#16191E] border border-card-border rounded-lg pl-3 pr-8 py-1.5 text-[10px] font-bold text-white focus:outline-none focus:border-brand-red cursor-pointer appearance-none transition-all" onchange="renderBenchmarkBI()">
+                <option value="nota" selected>Nota Média (Satisfação)</option>
+                <option value="total">Total de Feedbacks</option>
+              </select>
+              <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2.5 text-slate-400">
+                <i data-lucide="chevron-down" class="h-3 w-3"></i>
+              </div>
+            </div>
+          </div>
           <div class="flex-1 relative flex items-center justify-center">
             <canvas id="benchmarkGroupedChart" class="max-h-[380px] w-full"></canvas>
           </div>
@@ -1924,6 +1940,9 @@
     function renderBenchmarkBI() {
       const showA = document.getElementById("benchmarkShowA").value;
       const showB = document.getElementById("benchmarkShowB").value;
+      const metricSelect = document.getElementById("benchmarkMetricSelect");
+      const metric = metricSelect ? metricSelect.value : "nota";
+      const isNota = (metric === "nota");
 
       const dataA = feedbackData.filter(item => item.show === showA);
       const dataB = feedbackData.filter(item => item.show === showB);
@@ -1941,8 +1960,13 @@
         const avgA = deptDataA.length > 0 ? parseFloat((deptDataA.reduce((sum, item) => sum + item.nota, 0) / deptDataA.length).toFixed(2)) : 0;
         const avgB = deptDataB.length > 0 ? parseFloat((deptDataB.reduce((sum, item) => sum + item.nota, 0) / deptDataB.length).toFixed(2)) : 0;
 
-        ratingsA.push(avgA);
-        ratingsB.push(avgB);
+        if (isNota) {
+          ratingsA.push(avgA);
+          ratingsB.push(avgB);
+        } else {
+          ratingsA.push(deptDataA.length);
+          ratingsB.push(deptDataB.length);
+        }
 
         const graveA = deptDataA.filter(item => item.satisfacao === "Crítico").length;
         const graveB = deptDataB.filter(item => item.satisfacao === "Crítico").length;
@@ -1993,7 +2017,7 @@
           labels: gdSectors,
           datasets: [
             {
-              label: `Evento A: ${showA}`,
+              label: isNota ? `Média Evento A: ${showA}` : `Feedbacks Evento A: ${showA}`,
               data: ratingsA,
               backgroundColor: '#E30613',
               borderColor: '#E30613',
@@ -2001,7 +2025,7 @@
               borderRadius: 4
             },
             {
-              label: `Evento B: ${showB}`,
+              label: isNota ? `Média Evento B: ${showB}` : `Feedbacks Evento B: ${showB}`,
               data: ratingsB,
               backgroundColor: '#4A5568',
               borderColor: '#4A5568',
@@ -2028,10 +2052,10 @@
               ticks: { color: '#94a3b8', font: { family: 'Outfit', size: 9 } }
             },
             y: {
-              min: 1,
-              max: 5,
+              min: isNota ? 1 : undefined,
+              max: isNota ? 5 : undefined,
               grid: { color: 'rgba(46, 51, 64, 0.3)' },
-              ticks: { color: '#94a3b8', font: { family: 'Outfit', size: 9 }, stepSize: 1 }
+              ticks: { color: '#94a3b8', font: { family: 'Outfit', size: 9 }, stepSize: isNota ? 1 : undefined }
             }
           }
         }
