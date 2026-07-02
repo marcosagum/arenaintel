@@ -179,15 +179,15 @@
       </nav>
 
       <!-- GLOBAL FILTERS (Season & Show) -->
-      <div class="flex flex-wrap items-center gap-3 bg-[#121417]/80 px-3 py-2 rounded-lg border border-card-border/60">
+      <div class="flex items-center gap-2 bg-[#121417]/80 px-3 py-1.5 rounded-lg border border-card-border/60 flex-shrink-0">
         
-        <div class="flex items-center gap-1.5 text-slate-400">
-          <i data-lucide="filter" class="h-4 w-4 text-brand-red"></i>
+        <div class="hidden sm:flex items-center gap-1.5 text-slate-400 mr-1 flex-shrink-0">
+          <i data-lucide="filter" class="h-3.5 w-3.5 text-brand-red"></i>
           <span class="text-[10px] font-bold uppercase tracking-wider">Filtro Global:</span>
         </div>
 
         <!-- Seletor de Temporada -->
-        <div class="relative min-w-[140px]">
+        <div class="relative min-w-[130px] flex-shrink-0">
           <select id="seasonSelect" class="w-full bg-[#1A1D24] hover:bg-[#222630] border border-card-border hover:border-slate-600 rounded-md pl-3 pr-8 py-1.5 text-xs font-bold text-white focus:outline-none focus:border-brand-red cursor-pointer appearance-none transition-all" onchange="onSeasonChange()">
             <option value="Todas">Temporada: Todas</option>
             <option value="2026">Temporada 2026</option>
@@ -199,7 +199,7 @@
         </div>
 
         <!-- Seletor de Show (TOTALMENTE DINÂMICO) -->
-        <div class="relative min-w-[200px]">
+        <div class="relative min-w-[180px] flex-shrink-0">
           <select id="showSelect" class="w-full bg-[#1A1D24] hover:bg-[#222630] border border-card-border hover:border-slate-600 rounded-md pl-3 pr-8 py-1.5 text-xs font-bold text-white focus:outline-none focus:border-brand-red cursor-pointer appearance-none transition-all" onchange="refreshActiveTab()">
             <option value="Todos">Carregando shows...</option>
           </select>
