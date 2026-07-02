@@ -1050,9 +1050,29 @@
               if (uniqueKeys.has(uniqueKey)) return;
               uniqueKeys.add(uniqueKey);
 
-              let pilar = getValue(idxPilar) || "Operações";
-              if (!officialSectors.includes(pilar)) {
-                pilar = "Operações";
+              let pilar = getValue(idxPilar).toString().trim();
+              
+              if (!pilar || !officialSectors.includes(pilar)) {
+                const text = feedback.toLowerCase();
+                if (text.includes("bar") || text.includes("bebida") || text.includes("comida") || text.includes("cerveja") || text.includes("água") || text.includes("refrigerante") || text.includes("aliment") || text.includes("chopp") || text.includes("heineken") || text.includes("caro") || text.includes("preço")) {
+                  pilar = "A&B";
+                } else if (text.includes("seguran") || text.includes("revista") || text.includes("roubo") || text.includes("furto") || text.includes("assédio") || text.includes("briga") || text.includes("violên") || text.includes("agress") || text.includes("rude") || text.includes("grosso")) {
+                  pilar = "Segurança";
+                } else if (text.includes("som") || text.includes("áudio") || text.includes("acústic") || text.includes("volume") || text.includes("telão") || text.includes("led") || text.includes("painel") || text.includes("luz") || text.includes("ilumina") || text.includes("mídia")) {
+                  pilar = "Mídia";
+                } else if (text.includes("ingresso") || text.includes("catraca") || text.includes("leitura") || text.includes("qr") || text.includes("bilheteria") || text.includes("acesso") || text.includes("entrada") || text.includes("fila")) {
+                  pilar = "Ingressos";
+                } else if (text.includes("banheiro") || text.includes("sanitário") || text.includes("limpeza") || text.includes("sujo") || text.includes("sujeira") || text.includes("limpo") || text.includes("torneira") || text.includes("papel")) {
+                  pilar = "Manutenção";
+                } else if (text.includes("camarote") || text.includes("vip") || text.includes("exclusivo") || text.includes("área gourmet")) {
+                  pilar = "Camarote";
+                } else if (text.includes("brinde") || text.includes("ativação") || text.includes("foto") || text.includes("marketing") || text.includes("promotor")) {
+                  pilar = "Marketing";
+                } else if (text.includes("stand") || text.includes("comercial") || text.includes("venda") || text.includes("loja") || text.includes("compra")) {
+                  pilar = "Comercial";
+                } else {
+                  pilar = "Operações";
+                }
               }
 
               const resumo = getValue(idxResumo) || "Análise executiva de IA em processamento...";
