@@ -928,43 +928,43 @@
             items.push({ name: match[1], gid: match[2] });
           }
 
-          let gidsToFetch = [];
+          let sheetsToFetch = [];
           if (items.length > 0) {
             console.log("Abas descobertas na planilha:", items);
             const ignoreList = ["config", "dashboard", "home", "painel", "protótipo", "dados_consolidados", "consolidado"];
-            gidsToFetch = items
-              .filter(item => !ignoreList.some(ignored => item.name.toLowerCase().includes(ignored)))
-              .map(item => item.gid);
+            sheetsToFetch = items.filter(item => !ignoreList.some(ignored => item.name.toLowerCase().includes(ignored)));
           }
 
-          if (gidsToFetch.length === 0) {
-            gidsToFetch = [DEFAULT_GID];
+          if (sheetsToFetch.length === 0) {
+            sheetsToFetch = [{ name: "Thiaguinho", gid: DEFAULT_GID }];
           }
 
-          return fetchGidsAndConsolidate(gidsToFetch);
+          return fetchGidsAndConsolidate(sheetsToFetch);
         })
         .catch(err => {
           console.warn("Falha na varredura automática de abas, usando GID padrão.", err);
-          return fetchGidsAndConsolidate([DEFAULT_GID]);
+          return fetchGidsAndConsolidate([{ name: "Thiaguinho", gid: DEFAULT_GID }]);
         });
     }
 
-    function fetchGidsAndConsolidate(gids) {
-      const fetchPromises = gids.map(gid => {
+    function fetchGidsAndConsolidate(sheets) {
+      const fetchPromises = sheets.map(sheetObj => {
+        const gid = sheetObj.gid;
+        const sheetName = sheetObj.name;
         const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&gid=${gid}`;
         return fetch(url)
           .then(res => {
-            if (!res.ok) throw new Error(`Erro na aba ${gid}`);
+            if (!res.ok) throw new Error(`Erro na aba ${sheetName}`);
             return res.text();
           })
           .then(text => {
             const startIdx = text.indexOf("setResponse(");
             if (startIdx === -1) throw new Error("Dados mal formatados");
             const jsonString = text.substring(startIdx + 12, text.lastIndexOf(")"));
-            return JSON.parse(jsonString);
+            return { json: JSON.parse(jsonString), sheetName, gid };
           })
           .catch(err => {
-            console.warn(`Falha ao carregar aba ${gid}:`, err);
+            console.warn(`Falha ao carregar aba ${sheetName}:`, err);
             return null;
           });
       });
@@ -973,17 +973,18 @@
         .then(results => {
           let consolidatedRows = [];
           
-          results.forEach((json, index) => {
-            if (!json || !json.table || !json.table.rows) return;
+          results.forEach(result => {
+            if (!result || !result.json || !result.json.table || !result.json.table.rows) return;
             
+            const { json, sheetName, gid } = result;
             const cols = json.table.cols;
             const rows = json.table.rows;
-            const currentGid = gids[index] || "unknown";
             
             if (!rows || rows.length === 0) return;
 
+            // Encontrar os índices corretos dinamicamente
             let idxTimestamp = 0;
-            let idxShow = 1;
+            let idxShow = -1; // -1 indica que não encontramos coluna explícita de show
             let idxNota = 2;
             let idxFeedback = 3;
             let idxSetor = 4;
@@ -1000,7 +1001,10 @@
               } else if (label.includes("nota") || label.includes("avalia") || label.includes("experiên")) {
                 idxNota = colIndex;
               } else if (label.includes("show") || label.includes("evento")) {
-                idxShow = colIndex;
+                // Evitar mapear como show se for coluna de avaliação ou setor
+                if (!label.includes("avalia") && !label.includes("experiên") && !label.includes("setor")) {
+                  idxShow = colIndex;
+                }
               } else if (label.includes("feedback") || label.includes("detalhes") || label.includes("coment")) {
                 idxFeedback = colIndex;
               } else if (label.includes("setor f") || label.includes("onde assistiu") || label.includes("setor físico")) {
@@ -1037,7 +1041,17 @@
                 else timestamp = rawTimestamp.toString().substring(0, 10);
               }
 
-              const show = getValue(idxShow) || "Thiaguinho";
+              // Definir o nome do show
+              let show = "";
+              if (idxShow !== -1) {
+                show = getValue(idxShow);
+              }
+              // Fallback para o nome da aba se a célula ou a coluna de show não existirem
+              if (!show) {
+                show = sheetName;
+              }
+              show = show.trim();
+
               const nota = parseInt(getValue(idxNota)) || 3;
               const feedback = getValue(idxFeedback) || "";
               const setor = getValue(idxSetor) || "Pista Premium";
@@ -1069,7 +1083,7 @@
               else if (nota === 3) satisfacao = "Médio";
 
               consolidatedRows.push({
-                id: `${currentGid}_${rIdx + 1}`,
+                id: `${gid}_${rIdx + 1}`,
                 show,
                 nota,
                 feedback,
