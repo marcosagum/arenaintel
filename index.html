@@ -151,11 +151,11 @@
       </div>
     </header>
 
-    <!-- NEW NAVIGATION & FILTERS BAR -->
-    <div class="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-4 mb-6">
+    <!-- NEW NAVIGATION & FILTERS BAR (Unified Premium Control Panel) -->
+    <div class="bg-card-bg border border-card-border rounded-xl p-2.5 mb-6 corporate-shadow flex flex-col lg:flex-row lg:items-center justify-between gap-4">
       
       <!-- SPA NAV TABS -->
-      <nav class="flex flex-wrap bg-card-bg p-1 rounded-xl border border-card-border corporate-shadow gap-1">
+      <nav class="flex flex-wrap gap-1 p-0.5">
         <button id="tabBtn1" class="flex items-center gap-2 px-5 py-2.5 rounded-lg text-xs font-bold transition-all bg-brand-red text-white shadow-md shadow-brand-red/20" onclick="switchTab(1)">
           <i data-lucide="activity" class="h-4 w-4"></i>
           Monitoramento Ao Vivo
@@ -166,7 +166,7 @@
         </button>
         <button id="tabBtn3" class="flex items-center gap-2 px-5 py-2.5 rounded-lg text-xs font-bold text-slate-400 hover:text-slate-200 transition-all" onclick="switchTab(3)">
           <i data-lucide="users" class="h-4 w-4"></i>
-          Consolidação GD Diário
+          Alinhamento e Fechamento
         </button>
         <button id="tabBtn4" class="flex items-center gap-2 px-5 py-2.5 rounded-lg text-xs font-bold text-slate-400 hover:text-slate-200 transition-all" onclick="switchTab(4)">
           <i data-lucide="git-compare" class="h-4 w-4"></i>
@@ -178,32 +178,32 @@
         </button>
       </nav>
 
-      <!-- GLOBAL FILTERS (Season & Show) - Now Prominently Placed Near Content -->
-      <div class="flex flex-wrap items-center gap-3 bg-card-bg p-2 rounded-xl border border-card-border corporate-shadow">
+      <!-- GLOBAL FILTERS (Season & Show) -->
+      <div class="flex flex-wrap items-center gap-3 bg-[#121417]/80 px-3 py-2 rounded-lg border border-card-border/60">
         
-        <div class="flex items-center gap-1.5 px-2 text-slate-400">
+        <div class="flex items-center gap-1.5 text-slate-400">
           <i data-lucide="filter" class="h-4 w-4 text-brand-red"></i>
           <span class="text-[10px] font-bold uppercase tracking-wider">Filtro Global:</span>
         </div>
 
         <!-- Seletor de Temporada -->
-        <div class="relative min-w-[150px]">
-          <select id="seasonSelect" class="w-full bg-[#121417] hover:bg-[#16191E] border border-card-border hover:border-slate-600 rounded-lg pl-4 pr-10 py-2 text-xs font-bold text-white focus:outline-none focus:border-brand-red cursor-pointer appearance-none transition-all" onchange="onSeasonChange()">
+        <div class="relative min-w-[140px]">
+          <select id="seasonSelect" class="w-full bg-[#1A1D24] hover:bg-[#222630] border border-card-border hover:border-slate-600 rounded-md pl-3 pr-8 py-1.5 text-xs font-bold text-white focus:outline-none focus:border-brand-red cursor-pointer appearance-none transition-all" onchange="onSeasonChange()">
             <option value="Todas">Temporada: Todas</option>
             <option value="2026">Temporada 2026</option>
             <option value="2025">Temporada 2025</option>
           </select>
-          <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-slate-400">
+          <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2.5 text-slate-400">
             <i data-lucide="chevron-down" class="h-3.5 w-3.5"></i>
           </div>
         </div>
 
         <!-- Seletor de Show (TOTALMENTE DINÂMICO) -->
-        <div class="relative min-w-[220px]">
-          <select id="showSelect" class="w-full bg-[#121417] hover:bg-[#16191E] border border-card-border hover:border-slate-600 rounded-lg pl-4 pr-10 py-2 text-xs font-bold text-white focus:outline-none focus:border-brand-red cursor-pointer appearance-none transition-all" onchange="refreshActiveTab()">
+        <div class="relative min-w-[200px]">
+          <select id="showSelect" class="w-full bg-[#1A1D24] hover:bg-[#222630] border border-card-border hover:border-slate-600 rounded-md pl-3 pr-8 py-1.5 text-xs font-bold text-white focus:outline-none focus:border-brand-red cursor-pointer appearance-none transition-all" onchange="refreshActiveTab()">
             <option value="Todos">Carregando shows...</option>
           </select>
-          <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-slate-400">
+          <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2.5 text-slate-400">
             <i data-lucide="chevron-down" class="h-3.5 w-3.5"></i>
           </div>
         </div>
