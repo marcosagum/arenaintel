@@ -621,24 +621,24 @@
           <summary class="text-xs font-bold text-slate-400 hover:text-slate-300 cursor-pointer select-none flex items-center justify-between list-none">
             <span class="flex items-center gap-2">
               <i data-lucide="settings" class="h-4 w-4 text-slate-500 group-open:text-brand-red transition-colors"></i>
-              Painel do Administrador: Trocar Formulário e Aba da Planilha
+              Painel do Administrador: Trocar Formulário e Abas da Planilha
             </span>
             <i data-lucide="chevron-down" class="h-4 w-4 text-slate-500 transition-transform group-open:rotate-180"></i>
           </summary>
           
           <div class="mt-4 pt-4 border-t border-card-border/60 space-y-4">
             <p class="text-[10px] text-slate-400 leading-normal">
-              Sempre que você criar um novo formulário na planilha (como Maroon 5 ou Djavan), o Google cria uma nova aba. Insira a URL do novo Forms e o GID da nova aba (número no final da URL da planilha após <code>#gid=</code>) para atualizar o dashboard e o QR Code.
+              Sempre que você criar um novo formulário na planilha (como Maroon 5 ou Djavan), o Google cria uma nova aba. Insira a URL do novo Forms ativo e os GIDs de <strong>todas</strong> as abas de respostas da planilha que deseja consolidar no painel (separados por vírgula).
             </p>
             
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <div class="sm:col-span-2 space-y-1.5">
-                <label for="adminFormUrlInput" class="text-[9px] uppercase font-bold text-slate-500 tracking-wider">Link de Resposta do Google Forms</label>
+                <label for="adminFormUrlInput" class="text-[9px] uppercase font-bold text-slate-500 tracking-wider">Link de Resposta do Google Forms (Atual/Ativo)</label>
                 <input type="text" id="adminFormUrlInput" class="w-full bg-[#121417] border border-card-border rounded-lg px-3 py-2 text-xs text-white placeholder-slate-600 focus:outline-none focus:border-brand-red" placeholder="https://docs.google.com/forms/...">
               </div>
               <div class="space-y-1.5">
-                <label for="adminGidInput" class="text-[9px] uppercase font-bold text-slate-500 tracking-wider">GID da nova Aba (Sheets)</label>
-                <input type="text" id="adminGidInput" class="w-full bg-[#121417] border border-card-border rounded-lg px-3 py-2 text-xs text-white placeholder-slate-600 focus:outline-none focus:border-brand-red" placeholder="Ex: 1199428332">
+                <label for="adminGidInput" class="text-[9px] uppercase font-bold text-slate-500 tracking-wider">GIDs das Abas (Separados por Vírgula)</label>
+                <input type="text" id="adminGidInput" class="w-full bg-[#121417] border border-card-border rounded-lg px-3 py-2 text-xs text-white placeholder-slate-600 focus:outline-none focus:border-brand-red" placeholder="Ex: 1199428332, 20194025">
               </div>
             </div>
             
@@ -920,136 +920,166 @@
     }
 
     function loadDataFromGoogleSheet() {
-      const activeGid = localStorage.getItem("active_spreadsheet_gid") || DEFAULT_GID;
-      const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&gid=${activeGid}`;
-
-      return fetch(url)
-        .then(res => {
-          if (!res.ok) throw new Error("Erro na rede ao acessar planilha.");
-          return res.text();
-        })
-        .then(text => {
-          const startIdx = text.indexOf("setResponse(");
-          if (startIdx === -1) throw new Error("Dados da planilha não formatados pelo visualizador.");
-          const jsonString = text.substring(startIdx + 12, text.lastIndexOf(")"));
-          const json = JSON.parse(jsonString);
-          
-          const cols = json.table.cols;
-          const rows = json.table.rows;
-          
-          if (!rows || rows.length === 0) return;
-
-          // Encontrar os índices corretos dinamicamente
-          let idxTimestamp = 0;
-          let idxShow = 1;
-          let idxNota = 2;
-          let idxFeedback = 3;
-          let idxSetor = 4;
-          let idxFaixaEtaria = 5;
-          let idxPilar = -1;
-          let idxResumo = -1;
-          let idxSugestao = -1;
-
-          cols.forEach((col, index) => {
-            if (!col) return;
-            const label = (col.label || "").toLowerCase().trim();
-            if (label.includes("data") || label.includes("timestamp") || label.includes("carimbo")) {
-              idxTimestamp = index;
-            } else if (label.includes("nota") || label.includes("avalia") || label.includes("experiên")) {
-              idxNota = index;
-            } else if (label.includes("show") || label.includes("evento")) {
-              idxShow = index;
-            } else if (label.includes("feedback") || label.includes("detalhes") || label.includes("coment")) {
-              idxFeedback = index;
-            } else if (label.includes("setor f") || label.includes("onde assistiu") || label.includes("setor físico")) {
-              idxSetor = index;
-            } else if (label.includes("faixa") || label.includes("idade")) {
-              idxFaixaEtaria = index;
-            } else if (label.includes("pilar") || label.includes("departamento") || label.includes("setor operacional") || label.includes("ia")) {
-              idxPilar = index;
-            } else if (label.includes("resumo")) {
-              idxResumo = index;
-            } else if (label.includes("sugest") || label.includes("otimiza")) {
-              idxSugestao = index;
-            }
+      const activeGidsStr = localStorage.getItem("active_spreadsheet_gid") || DEFAULT_GID;
+      const gids = activeGidsStr.split(",").map(s => s.trim()).filter(Boolean);
+      
+      const fetchPromises = gids.map(gid => {
+        const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&gid=${gid}`;
+        return fetch(url)
+          .then(res => {
+            if (!res.ok) throw new Error(`Erro na aba ${gid}`);
+            return res.text();
+          })
+          .then(text => {
+            const startIdx = text.indexOf("setResponse(");
+            if (startIdx === -1) throw new Error("Dados mal formatados");
+            const jsonString = text.substring(startIdx + 12, text.lastIndexOf(")"));
+            return JSON.parse(jsonString);
+          })
+          .catch(err => {
+            console.warn(`Falha ao carregar aba ${gid}:`, err);
+            return null; // Retorna null para ignorar a aba com falha sem travar as outras
           });
+      });
 
-          const parsedData = rows.map((row, rIdx) => {
-            const cells = row.c || [];
+      return Promise.all(fetchPromises)
+        .then(results => {
+          let consolidatedRows = [];
+          
+          results.forEach((json, index) => {
+            if (!json || !json.table || !json.table.rows) return;
             
-            const getValue = (idx) => {
-              if (idx === -1 || idx >= cells.length || !cells[idx]) return "";
-              return cells[idx].v !== null && cells[idx].v !== undefined ? cells[idx].v : "";
-            };
+            const cols = json.table.cols;
+            const rows = json.table.rows;
+            const currentGid = gids[index] || "unknown";
+            
+            if (!rows || rows.length === 0) return;
 
-            const getFormatted = (idx) => {
-              if (idx === -1 || idx >= cells.length || !cells[idx]) return "";
-              return cells[idx].f !== null && cells[idx].f !== undefined ? cells[idx].f : getValue(idx);
-            };
+            // Encontrar os índices corretos dinamicamente
+            let idxTimestamp = 0;
+            let idxShow = 1;
+            let idxNota = 2;
+            let idxFeedback = 3;
+            let idxSetor = 4;
+            let idxFaixaEtaria = 5;
+            let idxPilar = -1;
+            let idxResumo = -1;
+            let idxSugestao = -1;
 
-            const rawTimestamp = getFormatted(idxTimestamp);
-            let timestamp = "20:00";
-            if (rawTimestamp) {
-              const match = rawTimestamp.toString().match(/\d{2}:\d{2}/);
-              if (match) timestamp = match[0];
-              else timestamp = rawTimestamp.toString().substring(0, 10);
-            }
-
-            const show = getValue(idxShow) || "Thiaguinho";
-            const nota = parseInt(getValue(idxNota)) || 3;
-            const feedback = getValue(idxFeedback) || "";
-            const setor = getValue(idxSetor) || "Pista Premium";
-            const faixaEtaria = getValue(idxFaixaEtaria) || "26-35";
-
-            let pilar = getValue(idxPilar) || "Operações";
-            if (!officialSectors.includes(pilar)) {
-              pilar = "Operações";
-            }
-
-            const resumo = getValue(idxResumo) || "Análise executiva de IA em processamento...";
-            const sugestao = getValue(idxSugestao) || "Aguardando sugestão operacional estruturada...";
-
-            // LÓGICA DE TEMPORADA DINÂMICA
-            // Extrai o ano a partir da data de submissão do formulário
-            let temporada = "2026";
-            const rawTimestampStr = rawTimestamp.toString();
-            if (rawTimestampStr.includes("2025")) {
-              temporada = "2025";
-            } else if (rawTimestampStr.includes("2026")) {
-              temporada = "2026";
-            } else {
-              // Se for um show novo sem ano definido ou com outro ano, tenta ler do ano atual ou deixa como 2026
-              const yearMatch = rawTimestampStr.match(/\b(202\d)\b/);
-              if (yearMatch) {
-                temporada = yearMatch[1];
+            cols.forEach((col, colIndex) => {
+              if (!col) return;
+              const label = (col.label || "").toLowerCase().trim();
+              if (label.includes("data") || label.includes("timestamp") || label.includes("carimbo")) {
+                idxTimestamp = colIndex;
+              } else if (label.includes("nota") || label.includes("avalia") || label.includes("experiên")) {
+                idxNota = colIndex;
+              } else if (label.includes("show") || label.includes("evento")) {
+                idxShow = colIndex;
+              } else if (label.includes("feedback") || label.includes("detalhes") || label.includes("coment")) {
+                idxFeedback = colIndex;
+              } else if (label.includes("setor f") || label.includes("onde assistiu") || label.includes("setor físico")) {
+                idxSetor = colIndex;
+              } else if (label.includes("faixa") || label.includes("idade")) {
+                idxFaixaEtaria = colIndex;
+              } else if (label.includes("pilar") || label.includes("departamento") || label.includes("setor operacional") || label.includes("ia")) {
+                idxPilar = colIndex;
+              } else if (label.includes("resumo")) {
+                idxResumo = colIndex;
+              } else if (label.includes("sugest") || label.includes("otimiza")) {
+                idxSugestao = colIndex;
               }
-            }
+            });
 
-            let satisfacao = "Excelente";
-            if (nota <= 2) satisfacao = "Crítico";
-            else if (nota === 3) satisfacao = "Médio";
+            rows.forEach((row, rIdx) => {
+              const cells = row.c || [];
+              
+              const getValue = (idx) => {
+                if (idx === -1 || idx >= cells.length || !cells[idx]) return "";
+                return cells[idx].v !== null && cells[idx].v !== undefined ? cells[idx].v : "";
+              };
 
-            return {
-              id: rIdx + 1,
-              show,
-              nota,
-              feedback,
-              setor,
-              pilar,
-              satisfacao,
-              resumo,
-              sugestao,
-              timestamp,
-              insightRegistrado: false,
-              insightTexto: "",
-              insightResponsavel: "",
-              faixaEtaria,
-              temporada
-            };
+              const getFormatted = (idx) => {
+                if (idx === -1 || idx >= cells.length || !cells[idx]) return "";
+                return cells[idx].f !== null && cells[idx].f !== undefined ? cells[idx].f : getValue(idx);
+              };
+
+              const rawTimestamp = getFormatted(idxTimestamp);
+              let timestamp = "20:00";
+              if (rawTimestamp) {
+                const match = rawTimestamp.toString().match(/\d{2}:\d{2}/);
+                if (match) timestamp = match[0];
+                else timestamp = rawTimestamp.toString().substring(0, 10);
+              }
+
+              const show = getValue(idxShow) || "Thiaguinho";
+              const nota = parseInt(getValue(idxNota)) || 3;
+              const feedback = getValue(idxFeedback) || "";
+              const setor = getValue(idxSetor) || "Pista Premium";
+              const faixaEtaria = getValue(idxFaixaEtaria) || "26-35";
+
+              let pilar = getValue(idxPilar) || "Operações";
+              if (!officialSectors.includes(pilar)) {
+                pilar = "Operações";
+              }
+
+              const resumo = getValue(idxResumo) || "Análise executiva de IA em processamento...";
+              const sugestao = getValue(idxSugestao) || "Aguardando sugestão operacional estruturada...";
+
+              // LÓGICA DE TEMPORADA DINÂMICA
+              let temporada = "2026";
+              const rawTimestampStr = rawTimestamp.toString();
+              if (rawTimestampStr.includes("2025")) {
+                temporada = "2025";
+              } else if (rawTimestampStr.includes("2026")) {
+                temporada = "2026";
+              } else {
+                const yearMatch = rawTimestampStr.match(/\b(202\d)\b/);
+                if (yearMatch) {
+                  temporada = yearMatch[1];
+                }
+              }
+
+              let satisfacao = "Excelente";
+              if (nota <= 2) satisfacao = "Crítico";
+              else if (nota === 3) satisfacao = "Médio";
+
+              consolidatedRows.push({
+                id: `${currentGid}_${rIdx + 1}`,
+                show,
+                nota,
+                feedback,
+                setor,
+                pilar,
+                satisfacao,
+                resumo,
+                sugestao,
+                timestamp,
+                insightRegistrado: false,
+                insightTexto: "",
+                insightResponsavel: "",
+                faixaEtaria,
+                temporada,
+                rawDate: rawTimestampStr
+              });
+            });
           });
 
-          if (parsedData.length > 0) {
-            feedbackData = parsedData.reverse();
+          if (consolidatedRows.length > 0) {
+            // Ordenação cronológica consolidada decrescente (mais recente primeiro)
+            const parseDate = (dStr) => {
+              if (!dStr) return new Date(0);
+              const parts = dStr.match(/(\d{2})\/(\d{2})\/(\d{4})\s+(\d{2}):(\d{2}):?(\d{2})?/);
+              if (parts) {
+                return new Date(parts[3], parts[2] - 1, parts[1], parts[4], parts[5], parts[6] || 0);
+              }
+              const d = new Date(dStr);
+              return isNaN(d.getTime()) ? new Date(0) : d;
+            };
+
+            consolidatedRows.sort((a, b) => parseDate(b.rawDate) - parseDate(a.rawDate));
+            feedbackData = consolidatedRows;
+          } else {
+            throw new Error("Nenhum dado válido carregado.");
           }
         });
     }
