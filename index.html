@@ -129,28 +129,8 @@
         </div>
       </div>
 
-      <!-- Controls: Season Filter + Show Selector + Status + Simulation -->
+      <!-- Controls: Status + Simulation -->
       <div class="flex flex-wrap items-center gap-3 md:gap-4">
-
-        <!-- Novo Filtro de Temporada -->
-        <div class="relative">
-          <select id="seasonSelect" class="bg-card-bg border border-card-border rounded-lg px-4 py-1.5 text-xs font-bold text-white focus:outline-none focus:border-brand-red cursor-pointer min-w-[140px]" onchange="onSeasonChange()">
-            <option value="Todas">Temporada: Todas</option>
-            <option value="2026">Temporada 2026</option>
-            <option value="2025">Temporada 2025</option>
-          </select>
-        </div>
-
-        <!-- Seletor Unificado de Show -->
-        <div class="relative">
-          <select id="showSelect" class="bg-card-bg border border-card-border rounded-lg px-4 py-1.5 text-xs font-bold text-white focus:outline-none focus:border-brand-red cursor-pointer min-w-[190px]" onchange="refreshActiveTab()">
-            <option value="Todos">Todos os Shows</option>
-            <option value="Thiaguinho">Show: Thiaguinho</option>
-            <option value="Kid Abelha">Show: Kid Abelha</option>
-            <option value="Coldplay">Show: Coldplay</option>
-            <option value="Ivete Sangalo">Show: Ivete Sangalo</option>
-          </select>
-        </div>
 
         <!-- Live Status Badge -->
         <div class="flex items-center gap-2 bg-card-bg border border-card-border px-3.5 py-1.5 rounded-full corporate-shadow">
@@ -171,29 +151,56 @@
       </div>
     </header>
 
-    <!-- SPA NAV TABS -->
-    <nav class="flex flex-wrap bg-card-bg p-1 rounded-xl border border-card-border max-w-fit mb-6 corporate-shadow gap-1">
-      <button id="tabBtn1" class="flex items-center gap-2 px-5 py-2.5 rounded-lg text-xs font-bold transition-all bg-brand-red text-white shadow-md shadow-brand-red/20" onclick="switchTab(1)">
-        <i data-lucide="activity" class="h-4 w-4"></i>
-        Monitoramento Ao Vivo
-      </button>
-      <button id="tabBtn2" class="flex items-center gap-2 px-5 py-2.5 rounded-lg text-xs font-bold text-slate-400 hover:text-slate-200 transition-all" onclick="switchTab(2)">
-        <i data-lucide="message-square" class="h-4 w-4"></i>
-        Fila de Feedbacks
-      </button>
-      <button id="tabBtn3" class="flex items-center gap-2 px-5 py-2.5 rounded-lg text-xs font-bold text-slate-400 hover:text-slate-200 transition-all" onclick="switchTab(3)">
-        <i data-lucide="users" class="h-4 w-4"></i>
-        Consolidação GD Diário
-      </button>
-      <button id="tabBtn4" class="flex items-center gap-2 px-5 py-2.5 rounded-lg text-xs font-bold text-slate-400 hover:text-slate-200 transition-all" onclick="switchTab(4)">
-        <i data-lucide="git-compare" class="h-4 w-4"></i>
-        Cruzamento de Dados
-      </button>
-      <button id="tabBtn5" class="flex items-center gap-2 px-5 py-2.5 rounded-lg text-xs font-bold text-slate-400 hover:text-slate-200 transition-all" onclick="switchTab(5)">
-        <i data-lucide="qr-code" class="h-4 w-4"></i>
-        Acesso à Pesquisa
-      </button>
-    </nav>
+    <!-- NEW NAVIGATION & FILTERS BAR -->
+    <div class="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-4 mb-6">
+      
+      <!-- SPA NAV TABS -->
+      <nav class="flex flex-wrap bg-card-bg p-1 rounded-xl border border-card-border corporate-shadow gap-1">
+        <button id="tabBtn1" class="flex items-center gap-2 px-5 py-2.5 rounded-lg text-xs font-bold transition-all bg-brand-red text-white shadow-md shadow-brand-red/20" onclick="switchTab(1)">
+          <i data-lucide="activity" class="h-4 w-4"></i>
+          Monitoramento Ao Vivo
+        </button>
+        <button id="tabBtn2" class="flex items-center gap-2 px-5 py-2.5 rounded-lg text-xs font-bold text-slate-400 hover:text-slate-200 transition-all" onclick="switchTab(2)">
+          <i data-lucide="message-square" class="h-4 w-4"></i>
+          Fila de Feedbacks
+        </button>
+        <button id="tabBtn3" class="flex items-center gap-2 px-5 py-2.5 rounded-lg text-xs font-bold text-slate-400 hover:text-slate-200 transition-all" onclick="switchTab(3)">
+          <i data-lucide="users" class="h-4 w-4"></i>
+          Consolidação GD Diário
+        </button>
+        <button id="tabBtn4" class="flex items-center gap-2 px-5 py-2.5 rounded-lg text-xs font-bold text-slate-400 hover:text-slate-200 transition-all" onclick="switchTab(4)">
+          <i data-lucide="git-compare" class="h-4 w-4"></i>
+          Cruzamento de Dados
+        </button>
+        <button id="tabBtn5" class="flex items-center gap-2 px-5 py-2.5 rounded-lg text-xs font-bold text-slate-400 hover:text-slate-200 transition-all" onclick="switchTab(5)">
+          <i data-lucide="qr-code" class="h-4 w-4"></i>
+          Acesso à Pesquisa
+        </button>
+      </nav>
+
+      <!-- GLOBAL FILTERS (Season & Show) - Now Prominently Placed Near Content -->
+      <div class="flex flex-wrap items-center gap-3 bg-card-bg p-1.5 rounded-xl border border-card-border corporate-shadow">
+        
+        <div class="flex items-center gap-1.5 px-2 text-slate-400">
+          <i data-lucide="filter" class="h-4 w-4 text-brand-red"></i>
+          <span class="text-[10px] font-bold uppercase tracking-wider">Filtro Global:</span>
+        </div>
+
+        <!-- Seletor de Temporada -->
+        <select id="seasonSelect" class="bg-[#121417] border border-card-border rounded-lg px-4 py-2 text-xs font-bold text-white focus:outline-none focus:border-brand-red cursor-pointer min-w-[130px]" onchange="onSeasonChange()">
+          <option value="Todas">Temporada: Todas</option>
+          <option value="2026">Temporada 2026</option>
+          <option value="2025">Temporada 2025</option>
+        </select>
+
+        <!-- Seletor de Show (TOTALMENTE DINÂMICO) -->
+        <select id="showSelect" class="bg-[#121417] border border-card-border rounded-lg px-4 py-2 text-xs font-bold text-white focus:outline-none focus:border-brand-red cursor-pointer min-w-[200px]" onchange="refreshActiveTab()">
+          <option value="Todos">Carregando shows...</option>
+        </select>
+
+      </div>
+
+    </div>
 
     <!-- ============================================== -->
     <!-- TAB 1: MONITORAMENTO AO VIVO -->
@@ -849,28 +856,28 @@
     function loadLocalFallbackData() {
       // Mock data local original
       feedbackData = [
-        { id:1, show:"Thiaguinho", nota:5, feedback:"O som estava perfeito na pista premium! Deu pra ouvir cada detalhe dos instrumentos, e o artista deu um show espetacular.", setor:"Pista Premium", pilar:"Operações", satisfacao:"Excelente", resumo:"Elogio ao som e à performance acústica geral na Pista Premium.", sugestao:"Manter calibração do sistema de som nos mesmos parâmetros.", timestamp:"20:45", insightRegistrado:false, insightTexto:"", insightResponsavel:"", faixaEtaria:"26-35", temporada:"2026" },
-        { id:2, show:"Thiaguinho", nota:2, feedback:"Filas imensas nos bares da pista premium. Fiquei quase 40 minutos para conseguir comprar água mineral.", setor:"Pista Premium", pilar:"A&B", satisfacao:"Crítico", resumo:"Reclamação de atraso no atendimento e formação de filas longas nos caixas.", sugestao:"Aumentar número de caixas móveis e equipe de bar em eventos de alta demanda.", timestamp:"20:55", insightRegistrado:false, insightTexto:"", insightResponsavel:"", faixaEtaria:"18-25", temporada:"2026" },
-        { id:3, show:"Thiaguinho", nota:1, feedback:"Os banheiros da arquibancada estavam imundos e sem água nas pias já no meio do show. Situação insuportável.", setor:"Arquibancada", pilar:"Manutenção", satisfacao:"Crítico", resumo:"Falta de higiene e desabastecimento de água nas torneiras do setor.", sugestao:"Reforçar equipe de limpeza volante e garantir abastecimento constante de caminhão pipa.", timestamp:"21:10", insightRegistrado:false, insightTexto:"", insightResponsavel:"", faixaEtaria:"36-50", temporada:"2026" },
-        { id:4, show:"Thiaguinho", nota:3, feedback:"A segurança na entrada foi muito confusa, filas se misturando na calçada. Mas lá dentro o acesso estava fluindo.", setor:"Arquibancada", pilar:"Segurança", satisfacao:"Médio", resumo:"Confusão e lentidão na organização das filas externas de acesso.", sugestao:"Instalar grades de contenção extras e sinalização clara dos setores na calçada externa.", timestamp:"18:40", insightRegistrado:false, insightTexto:"", insightResponsavel:"", faixaEtaria:"26-35", temporada:"2026" },
-        { id:5, show:"Thiaguinho", nota:4, feedback:"O camarote tem uma vista ótima e serviço rápido, porém o som do palco secundário estava embolando um pouco.", setor:"Camarote", pilar:"Camarote", satisfacao:"Excelente", resumo:"Boa experiência de camarote, com ressalvas de propagação sonora secundária.", sugestao:"Ajustar caixas de reforço (delay line) direcionadas para a área dos camarotes.", timestamp:"21:20", insightRegistrado:false, insightTexto:"", insightResponsavel:"", faixaEtaria:"26-35", temporada:"2026" },
-        { id:6, show:"Kid Abelha", nota:5, feedback:"Que show maravilhoso! Muito bem organizado, banheiros impecáveis e atendimento super rápido nos bares.", setor:"Camarote", pilar:"Camarote", satisfacao:"Excelente", resumo:"Elogio à organização geral, limpeza de banheiros e rapidez de bar VIP.", sugestao:"Replicar modelo operacional de limpeza adotado neste setor para toda a Arena.", timestamp:"21:30", insightRegistrado:false, insightTexto:"", insightResponsavel:"", faixaEtaria:"50+", temporada:"2025" },
-        { id:7, show:"Kid Abelha", nota:2, feedback:"Na arquibancada o som estava excessivamente baixo. Quem ficou na parte superior não ouvia bem os vocais.", setor:"Arquibancada", pilar:"Operações", satisfacao:"Crítico", resumo:"Volume de som insuficiente na cobertura superior da arquibancada.", sugestao:"Redirecionar os line arrays de alta cobertura para atingir o topo da arquibancada.", timestamp:"20:50", insightRegistrado:false, insightTexto:"", insightResponsavel:"", faixaEtaria:"36-50", temporada:"2025" },
-        { id:8, show:"Kid Abelha", nota:3, feedback:"A segurança demorou muito para revistar a galera na entrada. Entramos com o show já começado.", setor:"Pista Premium", pilar:"Segurança", satisfacao:"Médio", resumo:"Revista lenta provocando atraso na entrada do público.", sugestao:"Aumentar quantidade de portões detectores e readequar a escala de segurança de entrada.", timestamp:"19:15", insightRegistrado:false, insightTexto:"", insightResponsavel:"", faixaEtaria:"26-35", temporada:"2025" },
-        { id:9, show:"Kid Abelha", nota:4, feedback:"Bares organizados e sem muita fila. O refrigerante podia estar mais gelado, mas foi boa a experiência.", setor:"Pista Premium", pilar:"A&B", satisfacao:"Excelente", resumo:"Atendimento aceitável com leve ressalva sobre temperatura das bebidas.", sugestao:"Verificar freezers das ilhas internas e otimizar reabastecimento de gelo.", timestamp:"20:10", insightRegistrado:false, insightTexto:"", insightResponsavel:"", faixaEtaria:"18-25", temporada:"2025" },
-        { id:10, show:"Coldplay", nota:5, feedback:"Incrível! Tudo impecável. Segurança super atenciosa, som perfeito em todos os cantos e bares muito rápidos.", setor:"Pista Premium", pilar:"Segurança", satisfacao:"Excelente", resumo:"Excelência em segurança de contenção, clareza sonora e velocidade nos bares.", sugestao:"Manter padrão operacional internacional adotado neste show de alta performance.", timestamp:"21:40", insightRegistrado:false, insightTexto:"", insightResponsavel:"", faixaEtaria:"26-35", temporada:"2026" },
-        { id:11, show:"Coldplay", nota:5, feedback:"A estrutura do camarote estava sensacional. Banheiros higienizados de minuto em minuto e som cristalino.", setor:"Camarote", pilar:"Camarote", satisfacao:"Excelente", resumo:"Avaliação máxima de banheiros e som no setor de Camarotes.", sugestao:"Continuar com os mesmos fornecedores terceirizados de limpeza VIP.", timestamp:"21:15", insightRegistrado:false, insightTexto:"", insightResponsavel:"", faixaEtaria:"36-50", temporada:"2026" },
-        { id:12, show:"Coldplay", nota:3, feedback:"O show foi lindo, mas a saída do setor da arquibancada estava muito escura e perigosa. Quase caí na escada.", setor:"Arquibancada", pilar:"Segurança", satisfacao:"Médio", resumo:"Iluminação precária nas escadas de dispersão da arquibancada.", sugestao:"Instalar refletores de LED extras direcionados para a dispersão da arquibancada.", timestamp:"22:50", insightRegistrado:false, insightTexto:"", insightResponsavel:"", faixaEtaria:"18-25", temporada:"2026" },
-        { id:13, show:"Coldplay", nota:2, feedback:"Preços abusivos nos bares e poucas opções de alimentação para vegetarianos na pista.", setor:"Pista Premium", pilar:"A&B", satisfacao:"Crítico", resumo:"Insatisfação com preço de venda e diversidade no cardápio de comidas.", sugestao:"Negociar cardápios mais inclusivos e revisar margens de preços com operadores terceirizados.", timestamp:"20:30", insightRegistrado:false, insightTexto:"", insightResponsavel:"", faixaEtaria:"26-35", temporada:"2026" },
-        { id:14, show:"Ivete Sangalo", nota:4, feedback:"Segurança de dispersão muito ágil na pista. Som ótimo, sem ecos estranhos na Arena.", setor:"Pista Premium", pilar:"Segurança", satisfacao:"Excelente", resumo:"Dispersão ágil garantida por segurança operacional.", sugestao:"Manter posicionamento estratégico de guardas periféricos.", timestamp:"22:45", insightRegistrado:false, insightTexto:"", insightResponsavel:"", faixaEtaria:"18-25", temporada:"2025" },
-        { id:15, show:"Ivete Sangalo", nota:2, feedback:"Banheiro químico do Camarote vazando antes da metade do show. Cheiro horrível perto da área gourmet.", setor:"Camarote", pilar:"Manutenção", satisfacao:"Crítico", resumo:"Problema hidráulico e odor desagradável em sanitários VIP.", sugestao:"Realizar vistoria preventiva das bombas e encanamentos antes da abertura de portões.", timestamp:"21:00", insightRegistrado:false, insightTexto:"", insightResponsavel:"", faixaEtaria:"36-50", temporada:"2025" },
-        { id:16, show:"Ivete Sangalo", nota:2, feedback:"Bebidas quentes nos bares da arquibancada. Pagar caro para tomar cerveja quente é um absurdo.", setor:"Arquibancada", pilar:"A&B", satisfacao:"Crítico", resumo:"Logística falha no congelamento/armazenamento de bebidas na arquibancada.", sugestao:"Instalar contêineres térmicos com suprimento sobressalente de gelo nas copas internas.", timestamp:"20:25", insightRegistrado:false, insightTexto:"", insightResponsavel:"", faixaEtaria:"18-25", temporada:"2025" },
-        { id:17, show:"Ivete Sangalo", nota:4, feedback:"O som estava incrível na pista, mas a arquibancada treme com os pulos. Dá um certo medo, mas o staff explicou que é normal.", setor:"Arquibancada", pilar:"Operações", satisfacao:"Excelente", resumo:"Vibração estrutural gerando apreensão, mitigada pela segurança.", sugestao:"Colocar placas de comunicação explicando a flexibilidade estrutural e laudos de segurança visíveis.", timestamp:"21:35", insightRegistrado:false, insightTexto:"", insightResponsavel:"", faixaEtaria:"26-35", temporada:"2025" },
-        { id:18, show:"Ivete Sangalo", nota:3, feedback:"Som muito bom, mas sanitários com filas imensas e papel acabou rápido na Pista Premium.", setor:"Pista Premium", pilar:"Manutenção", satisfacao:"Médio", resumo:"Falta de insumos higiênicos básicos e filas no pilar sanitário.", sugestao:"Criar kits de reposição rápida para equipes volantes nos banheiros.", timestamp:"20:50", insightRegistrado:false, insightTexto:"", insightResponsavel:"", faixaEtaria:"36-50", temporada:"2025" },
-        { id:19, show:"Thiaguinho", nota:2, feedback:"O leitor de QR code da catraca de entrada travou e gerou uma fila enorme no sol de 30 minutos.", setor:"Arquibancada", pilar:"Ingressos", satisfacao:"Crítico", resumo:"Falha de hardware/software nas catracas eletrônicas na entrada.", sugestao:"Manter leitor de backup portátil pronto e resetar catracas preventivamente antes da abertura.", timestamp:"17:15", insightRegistrado:false, insightTexto:"", insightResponsavel:"", faixaEtaria:"18-25", temporada:"2026" },
-        { id:20, show:"Coldplay", nota:4, feedback:"A entrada com a pulseira de LED foi super rápida e sem filas. O stand comercial da Heineken estava bem legal.", setor:"Pista Premium", pilar:"Comercial", satisfacao:"Excelente", resumo:"Agilidade na distribuição e ativação comercial de patrocinador atrativa.", sugestao:"Replicar posicionamento do stand comercial para maximizar visibilidade.", timestamp:"18:20", insightRegistrado:false, insightTexto:"", insightResponsavel:"", faixaEtaria:"26-35", temporada:"2026" },
-        { id:21, show:"Kid Abelha", nota:3, feedback:"O telão de LED de fundo estava com alguns painéis apagados e piscando, atrapalhando a visualização.", setor:"Pista Premium", pilar:"Mídia", satisfacao:"Médio", resumo:"Falha técnica/hardware em painel de LED principal.", sugestao:"Testar módulos do painel com maior antecedência e calibrar conexões de recepção.", timestamp:"20:30", insightRegistrado:false, insightTexto:"", insightResponsavel:"", faixaEtaria:"36-50", temporada:"2025" },
-        { id:22, show:"Ivete Sangalo", nota:4, feedback:"Adoramos o painel de fotos montado no corredor. A equipe de marketing foi muito simpática.", setor:"Arquibancada", pilar:"Marketing", satisfacao:"Excelente", resumo:"Ação de marketing promocional bem avaliada.", sugestao:"Manter escala de promotores simpáticos e dinâmicos para atendimento fotográfico.", timestamp:"19:40", insightRegistrado:false, insightTexto:"", insightResponsavel:"", faixaEtaria:"18-25", temporada:"2025" }
+        { id:1, show:"Thiaguinho", nota:5, feedback:"O som estava perfeito na pista premium! Deu pra ouvir cada detalhe dos instrumentos, e o artista deu um show espetacular.", setor:"Pista Premium", pilar:"Operações", satisfacao:"Excelente", resumo:"Elogio ao som e à performance acústica geral na Pista Premium.", sugestao:"Manter calibração do sistema de som nos mesmos parâmetros.", timestamp:"02/07/2026 20:45", insightRegistrado:false, insightTexto:"", insightResponsavel:"", faixaEtaria:"26-35", temporada:"2026" },
+        { id:2, show:"Thiaguinho", nota:2, feedback:"Filas imensas nos bares da pista premium. Fiquei quase 40 minutos para conseguir comprar água mineral.", setor:"Pista Premium", pilar:"A&B", satisfacao:"Crítico", resumo:"Reclamação de atraso no atendimento e formação de filas longas nos caixas.", sugestao:"Aumentar número de caixas móveis e equipe de bar em eventos de alta demanda.", timestamp:"02/07/2026 20:55", insightRegistrado:false, insightTexto:"", insightResponsavel:"", faixaEtaria:"18-25", temporada:"2026" },
+        { id:3, show:"Thiaguinho", nota:1, feedback:"Os banheiros da arquibancada estavam imundos e sem água nas pias já no meio do show. Situação insuportável.", setor:"Arquibancada", pilar:"Manutenção", satisfacao:"Crítico", resumo:"Falta de higiene e desabastecimento de água nas torneiras do setor.", sugestao:"Reforçar equipe de limpeza volante e garantir abastecimento constante de caminhão pipa.", timestamp:"02/07/2026 21:10", insightRegistrado:false, insightTexto:"", insightResponsavel:"", faixaEtaria:"36-50", temporada:"2026" },
+        { id:4, show:"Thiaguinho", nota:3, feedback:"A segurança na entrada foi muito confusa, filas se misturando na calçada. Mas lá dentro o acesso estava fluindo.", setor:"Arquibancada", pilar:"Segurança", satisfacao:"Médio", resumo:"Confusão e lentidão na organização das filas externas de acesso.", sugestao:"Instalar grades de contenção extras e sinalização clara dos setores na calçada externa.", timestamp:"02/07/2026 18:40", insightRegistrado:false, insightTexto:"", insightResponsavel:"", faixaEtaria:"26-35", temporada:"2026" },
+        { id:5, show:"Thiaguinho", nota:4, feedback:"O camarote tem uma vista ótima e serviço rápido, porém o som do palco secundário estava embolando um pouco.", setor:"Camarote", pilar:"Camarote", satisfacao:"Excelente", resumo:"Boa experiência de camarote, com ressalvas de propagação sonora secundária.", sugestao:"Ajustar caixas de reforço (delay line) direcionadas para a área dos camarotes.", timestamp:"02/07/2026 21:20", insightRegistrado:false, insightTexto:"", insightResponsavel:"", faixaEtaria:"26-35", temporada:"2026" },
+        { id:6, show:"Kid Abelha", nota:5, feedback:"Que show maravilhoso! Muito bem organizado, banheiros impecáveis e atendimento super rápido nos bares.", setor:"Camarote", pilar:"Camarote", satisfacao:"Excelente", resumo:"Elogio à organização geral, limpeza de banheiros e rapidez de bar VIP.", sugestao:"Replicar modelo operacional de limpeza adotado neste setor para toda a Arena.", timestamp:"15/05/2025 21:30", insightRegistrado:false, insightTexto:"", insightResponsavel:"", faixaEtaria:"50+", temporada:"2025" },
+        { id:7, show:"Kid Abelha", nota:2, feedback:"Na arquibancada o som estava excessivamente baixo. Quem ficou na parte superior não ouvia bem os vocais.", setor:"Arquibancada", pilar:"Operações", satisfacao:"Crítico", resumo:"Volume de som insuficiente na cobertura superior da arquibancada.", sugestao:"Redirecionar os line arrays de alta cobertura para atingir o topo da arquibancada.", timestamp:"15/05/2025 20:50", insightRegistrado:false, insightTexto:"", insightResponsavel:"", faixaEtaria:"36-50", temporada:"2025" },
+        { id:8, show:"Kid Abelha", nota:3, feedback:"A segurança demorou muito para revistar a galera na entrada. Entramos com o show já começado.", setor:"Pista Premium", pilar:"Segurança", satisfacao:"Médio", resumo:"Revista lenta provocando atraso na entrada do público.", sugestao:"Aumentar quantidade de portões detectores e readequar a escala de segurança de entrada.", timestamp:"15/05/2025 19:15", insightRegistrado:false, insightTexto:"", insightResponsavel:"", faixaEtaria:"26-35", temporada:"2025" },
+        { id:9, show:"Kid Abelha", nota:4, feedback:"Bares organizados e sem muita fila. O refrigerante podia estar mais gelado, mas foi boa a experiência.", setor:"Pista Premium", pilar:"A&B", satisfacao:"Excelente", resumo:"Atendimento aceitável com leve ressalva sobre temperatura das bebidas.", sugestao:"Verificar freezers das ilhas internas e otimizar reabastecimento de gelo.", timestamp:"15/05/2025 20:10", insightRegistrado:false, insightTexto:"", insightResponsavel:"", faixaEtaria:"18-25", temporada:"2025" },
+        { id:10, show:"Coldplay", nota:5, feedback:"Incrível! Tudo impecável. Segurança super atenciosa, som perfeito em todos os cantos e bares muito rápidos.", setor:"Pista Premium", pilar:"Segurança", satisfacao:"Excelente", resumo:"Excelência em segurança de contenção, clareza sonora e velocidade nos bares.", sugestao:"Manter padrão operacional internacional adotado neste show de alta performance.", timestamp:"12/08/2026 21:40", insightRegistrado:false, insightTexto:"", insightResponsavel:"", faixaEtaria:"26-35", temporada:"2026" },
+        { id:11, show:"Coldplay", nota:5, feedback:"A estrutura do camarote estava sensacional. Banheiros higienizados de minuto em minuto e som cristalino.", setor:"Camarote", pilar:"Camarote", satisfacao:"Excelente", resumo:"Avaliação máxima de banheiros e som no setor de Camarotes.", sugestao:"Continuar com os mesmos fornecedores terceirizados de limpeza VIP.", timestamp:"12/08/2026 21:15", insightRegistrado:false, insightTexto:"", insightResponsavel:"", faixaEtaria:"36-50", temporada:"2026" },
+        { id:12, show:"Coldplay", nota:3, feedback:"O show foi lindo, mas a saída do setor da arquibancada estava muito escura e perigosa. Quase caí na escada.", setor:"Arquibancada", pilar:"Segurança", satisfacao:"Médio", resumo:"Iluminação precária nas escadas de dispersão da arquibancada.", sugestao:"Instalar refletores de LED extras direcionados para a dispersão da arquibancada.", timestamp:"12/08/2026 22:50", insightRegistrado:false, insightTexto:"", insightResponsavel:"", faixaEtaria:"18-25", temporada:"2026" },
+        { id:13, show:"Coldplay", nota:2, feedback:"Preços abusivos nos bares e poucas opções de alimentação para vegetarianos na pista.", setor:"Pista Premium", pilar:"A&B", satisfacao:"Crítico", resumo:"Insatisfação com preço de venda e diversidade no cardápio de comidas.", sugestao:"Negociar cardápios mais inclusivos e revisar margens de preços com operadores terceirizados.", timestamp:"12/08/2026 20:30", insightRegistrado:false, insightTexto:"", insightResponsavel:"", faixaEtaria:"26-35", temporada:"2026" },
+        { id:14, show:"Ivete Sangalo", nota:4, feedback:"Segurança de dispersão muito ágil na pista. Som ótimo, sem ecos estranhos na Arena.", setor:"Pista Premium", pilar:"Segurança", satisfacao:"Excelente", resumo:"Dispersão ágil garantida por segurança operacional.", sugestao:"Manter posicionamento estratégico de guardas periféricos.", timestamp:"18/10/2025 22:45", insightRegistrado:false, insightTexto:"", insightResponsavel:"", faixaEtaria:"18-25", temporada:"2025" },
+        { id:15, show:"Ivete Sangalo", nota:2, feedback:"Banheiro químico do Camarote vazando antes da metade do show. Cheiro horrível perto da área gourmet.", setor:"Camarote", pilar:"Manutenção", satisfacao:"Crítico", resumo:"Problema hidráulico e odor desagradável em sanitários VIP.", sugestao:"Realizar vistoria preventiva das bombas e encanamentos antes da abertura de portões.", timestamp:"18/10/2025 21:00", insightRegistrado:false, insightTexto:"", insightResponsavel:"", faixaEtaria:"36-50", temporada:"2025" },
+        { id:16, show:"Ivete Sangalo", nota:2, feedback:"Bebidas quentes nos bares da arquibancada. Pagar caro para tomar cerveja quente é um absurdo.", setor:"Arquibancada", pilar:"A&B", satisfacao:"Crítico", resumo:"Logística falha no congelamento/armazenamento de bebidas na arquibancada.", sugestao:"Instalar contêineres térmicos com suprimento sobressalente de gelo nas copas internas.", timestamp:"18/10/2025 20:25", insightRegistrado:false, insightTexto:"", insightResponsavel:"", faixaEtaria:"18-25", temporada:"2025" },
+        { id:17, show:"Ivete Sangalo", nota:4, feedback:"O som estava incrível na pista, mas a arquibancada treme com os pulos. Dá um certo medo, mas o staff explicou que é normal.", setor:"Arquibancada", pilar:"Operações", satisfacao:"Excelente", resumo:"Vibração estrutural gerando apreensão, mitigada pela segurança.", sugestao:"Colocar placas de comunicação explicando a flexibilidade estrutural e laudos de segurança visíveis.", timestamp:"18/10/2025 21:35", insightRegistrado:false, insightTexto:"", insightResponsavel:"", faixaEtaria:"26-35", temporada:"2025" },
+        { id:18, show:"Ivete Sangalo", nota:3, feedback:"Som muito bom, mas sanitários com filas imensas e papel acabou rápido na Pista Premium.", setor:"Pista Premium", pilar:"Manutenção", satisfacao:"Médio", resumo:"Falta de insumos higiênicos básicos e filas no pilar sanitário.", sugestao:"Criar kits de reposição rápida para equipes volantes nos banheiros.", timestamp:"18/10/2025 20:50", insightRegistrado:false, insightTexto:"", insightResponsavel:"", faixaEtaria:"36-50", temporada:"2025" },
+        { id:19, show:"Thiaguinho", nota:2, feedback:"O leitor de QR code da catraca de entrada travou e gerou uma fila enorme no sol de 30 minutos.", setor:"Arquibancada", pilar:"Ingressos", satisfacao:"Crítico", resumo:"Falha de hardware/software nas catracas eletrônicas na entrada.", sugestao:"Manter leitor de backup portátil pronto e resetar catracas preventivamente antes da abertura.", timestamp:"02/07/2026 17:15", insightRegistrado:false, insightTexto:"", insightResponsavel:"", faixaEtaria:"18-25", temporada:"2026" },
+        { id:20, show:"Coldplay", nota:4, feedback:"A entrada com a pulseira de LED foi super rápida e sem filas. O stand comercial da Heineken estava bem legal.", setor:"Pista Premium", pilar:"Comercial", satisfacao:"Excelente", resumo:"Agilidade na distribuição e ativação comercial de patrocinador atrativa.", sugestao:"Replicar posicionamento do stand comercial para maximizar visibilidade.", timestamp:"12/08/2026 18:20", insightRegistrado:false, insightTexto:"", insightResponsavel:"", faixaEtaria:"26-35", temporada:"2026" },
+        { id:21, show:"Kid Abelha", nota:3, feedback:"O telão de LED de fundo estava com alguns painéis apagados e piscando, atrapalhando a visualização.", setor:"Pista Premium", pilar:"Mídia", satisfacao:"Médio", resumo:"Falha técnica/hardware em painel de LED principal.", sugestao:"Testar módulos do painel com maior antecedência e calibrar conexões de recepção.", timestamp:"15/05/2025 20:30", insightRegistrado:false, insightTexto:"", insightResponsavel:"", faixaEtaria:"36-50", temporada:"2025" },
+        { id:22, show:"Ivete Sangalo", nota:4, feedback:"Adoramos o painel de fotos montado no corredor. A equipe de marketing foi muito simpática.", setor:"Arquibancada", pilar:"Marketing", satisfacao:"Excelente", resumo:"Ação de marketing promocional bem avaliada.", sugestao:"Manter escala de promotores simpáticos e dinâmicos para atendimento fotográfico.", timestamp:"18/10/2025 19:40", insightRegistrado:false, insightTexto:"", insightResponsavel:"", faixaEtaria:"18-25", temporada:"2025" }
       ];
     }
 
@@ -953,13 +960,21 @@
             const resumo = getValue(idxResumo) || "Análise executiva de IA em processamento...";
             const sugestao = getValue(idxSugestao) || "Aguardando sugestão operacional estruturada...";
 
-            const showSeasons = {
-              "Thiaguinho": "2026",
-              "Coldplay": "2026",
-              "Kid Abelha": "2025",
-              "Ivete Sangalo": "2025"
-            };
-            const temporada = showSeasons[show] || "2026";
+            // LÓGICA DE TEMPORADA DINÂMICA
+            // Extrai o ano a partir da data de submissão do formulário
+            let temporada = "2026";
+            const rawTimestampStr = rawTimestamp.toString();
+            if (rawTimestampStr.includes("2025")) {
+              temporada = "2025";
+            } else if (rawTimestampStr.includes("2026")) {
+              temporada = "2026";
+            } else {
+              // Se for um show novo sem ano definido ou com outro ano, tenta ler do ano atual ou deixa como 2026
+              const yearMatch = rawTimestampStr.match(/\b(202\d)\b/);
+              if (yearMatch) {
+                temporada = yearMatch[1];
+              }
+            }
 
             let satisfacao = "Excelente";
             if (nota <= 2) satisfacao = "Crítico";
@@ -998,6 +1013,7 @@
       refreshActiveTab();
     }
 
+    // ATUALIZAÇÃO 100% DINÂMICA COM OS SHOWS DA PLANILHA
     function updateShowDropdownOptions() {
       const season = document.getElementById("seasonSelect").value;
       const showSelect = document.getElementById("showSelect");
@@ -1005,23 +1021,28 @@
       
       showSelect.innerHTML = `<option value="Todos">Todos os Shows</option>`;
       
-      const showSeasons = {
-        "Thiaguinho": "2026",
-        "Coldplay": "2026",
-        "Kid Abelha": "2025",
-        "Ivete Sangalo": "2025"
-      };
+      const uniqueShows = [];
+      const showToSeason = {};
       
-      for (const [show, s] of Object.entries(showSeasons)) {
-        if (season === "Todas" || s === season) {
+      feedbackData.forEach(item => {
+        if (item.show && !uniqueShows.includes(item.show)) {
+          uniqueShows.push(item.show);
+          showToSeason[item.show] = item.temporada;
+        }
+      });
+
+      // Ordenar alfabeticamente para ficar organizado
+      uniqueShows.sort().forEach(show => {
+        const showSeason = showToSeason[show] || "2026";
+        if (season === "Todas" || showSeason === season) {
           const option = document.createElement("option");
           option.value = show;
           option.text = `Show: ${show}`;
           showSelect.appendChild(option);
         }
-      }
+      });
       
-      if (season === "Todas" || showSeasons[currentSelected] === season) {
+      if (uniqueShows.includes(currentSelected)) {
         showSelect.value = currentSelected;
       } else {
         showSelect.value = "Todos";
@@ -1090,6 +1111,10 @@
         const source = incomingFeedbacksPool[Math.floor(Math.random() * incomingFeedbacksPool.length)];
         const newFb = { ...source, id: feedbackData.length + 1, insightRegistrado: false };
         feedbackData.unshift(newFb);
+        
+        // Garante que o show do simulador seja incluído dinamicamente nas opções se não existir
+        updateShowDropdownOptions();
+        
         refreshActiveTab();
         showLiveToast(newFb);
         
@@ -1201,7 +1226,9 @@
         "Thiaguinho": { access: 12450, issued: 15000 },
         "Kid Abelha": { access: 8800, issued: 10000 },
         "Coldplay": { access: 15000, issued: 15000 },
-        "Ivete Sangalo": { access: 11200, issued: 13000 }
+        "Ivete Sangalo": { access: 11200, issued: 13000 },
+        "Maroon 5": { access: 13800, issued: 15000 },
+        "Djavan": { access: 9500, issued: 11000 }
       };
 
       let maxAcessos = 0;
@@ -1210,16 +1237,27 @@
       const season = document.getElementById("seasonSelect").value;
 
       if (activeShow !== "Todos") {
-        maxAcessos = showCapacities[activeShow]?.access || 8800;
-        maxEmitidos = showCapacities[activeShow]?.issued || 10000;
+        maxAcessos = showCapacities[activeShow]?.access || 10000;
+        maxEmitidos = showCapacities[activeShow]?.issued || 12000;
       } else {
-        for (const [show, cap] of Object.entries(showCapacities)) {
-          const showSeason = show === "Thiaguinho" || show === "Coldplay" ? "2026" : "2025";
+        // Obter capacidade de todos os shows da temporada atual
+        const uniqueShows = [];
+        const showToSeason = {};
+        feedbackData.forEach(item => {
+          if (!uniqueShows.includes(item.show)) {
+            uniqueShows.push(item.show);
+            showToSeason[item.show] = item.temporada;
+          }
+        });
+
+        uniqueShows.forEach(show => {
+          const showSeason = showToSeason[show] || "2026";
           if (season === "Todas" || showSeason === season) {
+            const cap = showCapacities[show] || { access: 10000, issued: 12000 };
             maxAcessos += cap.access;
             maxEmitidos += cap.issued;
           }
-        }
+        });
       }
       
       const pct = maxEmitidos > 0 ? Math.round((maxAcessos / maxEmitidos) * 100) : 0;
@@ -1558,10 +1596,51 @@
         benchRes.classList.remove("hidden");
         
         helpText.innerText = "Benchmarking Comparativo: compare o desempenho operacional médio de dois shows e avalie a variação percentual de ocorrências graves.";
+
+        // Atualizar dropdowns de benchmark com shows dinâmicos da planilha
+        updateBenchmarkDropdowns();
       }
       
       lucide.createIcons();
       renderBI();
+    }
+
+    function updateBenchmarkDropdowns() {
+      const showA = document.getElementById("benchmarkShowA");
+      const showB = document.getElementById("benchmarkShowB");
+      
+      const selectedA = showA.value;
+      const selectedB = showB.value;
+
+      showA.innerHTML = "";
+      showB.innerHTML = "";
+
+      const uniqueShows = [];
+      feedbackData.forEach(item => {
+        if (item.show && !uniqueShows.includes(item.show)) {
+          uniqueShows.push(item.show);
+        }
+      });
+      uniqueShows.sort();
+
+      uniqueShows.forEach(show => {
+        const optA = document.createElement("option");
+        optA.value = show;
+        optA.text = `Show: ${show}`;
+        showA.appendChild(optA);
+
+        const optB = document.createElement("option");
+        optB.value = show;
+        optB.text = `Show: ${show}`;
+        showB.appendChild(optB);
+      });
+
+      if (uniqueShows.includes(selectedA)) showA.value = selectedA;
+      else if (uniqueShows.length > 0) showA.value = uniqueShows[0];
+
+      if (uniqueShows.includes(selectedB)) showB.value = selectedB;
+      else if (uniqueShows.length > 1) showB.value = uniqueShows[1];
+      else if (uniqueShows.length > 0) showB.value = uniqueShows[0];
     }
 
     function renderBI() {
@@ -1583,14 +1662,15 @@
       } else if (varX === "setor") {
         uniqueX = ["Pista Premium", "Arquibancada", "Camarote"];
       } else {
+        // Shows dinâmicos carregados da planilha sob a temporada ativa
         const season = document.getElementById("seasonSelect").value;
-        if (season === "2026") {
-          uniqueX = ["Thiaguinho", "Coldplay"];
-        } else if (season === "2025") {
-          uniqueX = ["Kid Abelha", "Ivete Sangalo"];
-        } else {
-          uniqueX = ["Thiaguinho", "Kid Abelha", "Coldplay", "Ivete Sangalo"];
-        }
+        const showsSet = new Set();
+        feedbackData.forEach(item => {
+          if (season === "Todas" || item.temporada === season) {
+            showsSet.add(item.show);
+          }
+        });
+        uniqueX = Array.from(showsSet).sort();
       }
 
       let uniqueY = [];
