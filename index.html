@@ -615,36 +615,30 @@
         </div>
       </div>
 
-      <!-- Configuração da URL e GID (Exclusivo Administradores) -->
+      <!-- Configuração da URL (Exclusivo Administradores) -->
       <div class="bg-card-bg border border-card-border p-5 rounded-xl corporate-shadow max-w-2xl w-full">
         <details class="group">
           <summary class="text-xs font-bold text-slate-400 hover:text-slate-300 cursor-pointer select-none flex items-center justify-between list-none">
             <span class="flex items-center gap-2">
               <i data-lucide="settings" class="h-4 w-4 text-slate-500 group-open:text-brand-red transition-colors"></i>
-              Painel do Administrador: Trocar Formulário e Abas da Planilha
+              Painel do Administrador: Trocar Link do Formulário Ativo
             </span>
             <i data-lucide="chevron-down" class="h-4 w-4 text-slate-500 transition-transform group-open:rotate-180"></i>
           </summary>
           
           <div class="mt-4 pt-4 border-t border-card-border/60 space-y-4">
             <p class="text-[10px] text-slate-400 leading-normal">
-              Sempre que você criar um novo formulário na planilha (como Maroon 5 ou Djavan), o Google cria uma nova aba. Insira a URL do novo Forms ativo e os GIDs de <strong>todas</strong> as abas de respostas da planilha que deseja consolidar no painel (separados por vírgula).
+              A varredura das respostas da planilha é feita de forma <strong>100% automática em todas as abas</strong> de eventos. Insira abaixo apenas o link do novo formulário ativo para redirecionar o QR Code e o botão de pesquisa da Arena.
             </p>
             
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-              <div class="sm:col-span-2 space-y-1.5">
-                <label for="adminFormUrlInput" class="text-[9px] uppercase font-bold text-slate-500 tracking-wider">Link de Resposta do Google Forms (Atual/Ativo)</label>
-                <input type="text" id="adminFormUrlInput" class="w-full bg-[#121417] border border-card-border rounded-lg px-3 py-2 text-xs text-white placeholder-slate-600 focus:outline-none focus:border-brand-red" placeholder="https://docs.google.com/forms/...">
-              </div>
-              <div class="space-y-1.5">
-                <label for="adminGidInput" class="text-[9px] uppercase font-bold text-slate-500 tracking-wider">GIDs das Abas (Separados por Vírgula)</label>
-                <input type="text" id="adminGidInput" class="w-full bg-[#121417] border border-card-border rounded-lg px-3 py-2 text-xs text-white placeholder-slate-600 focus:outline-none focus:border-brand-red" placeholder="Ex: 1199428332, 20194025">
-              </div>
+            <div class="space-y-1.5">
+              <label for="adminFormUrlInput" class="text-[9px] uppercase font-bold text-slate-500 tracking-wider">Link de Resposta do Google Forms (Atual/Ativo)</label>
+              <input type="text" id="adminFormUrlInput" class="w-full bg-[#121417] border border-card-border rounded-lg px-3 py-2 text-xs text-white placeholder-slate-600 focus:outline-none focus:border-brand-red" placeholder="https://docs.google.com/forms/...">
             </div>
             
             <div class="flex justify-end">
               <button onclick="saveAdminSettings()" class="bg-brand-red hover:bg-brand-red-hover text-xs font-bold text-white px-5 py-2.5 rounded-lg transition-all flex items-center gap-1.5 corporate-shadow">
-                <i data-lucide="save" class="h-3.5 w-3.5"></i> Salvar Configurações
+                <i data-lucide="save" class="h-3.5 w-3.5"></i> Salvar Formulário Ativo
               </button>
             </div>
           </div>
@@ -805,27 +799,23 @@
       initDashboard();
     });
 
-    // Configurar a URL e GID carregados da memória do navegador (localStorage)
+    // Configurar a URL ativa carregada da memória do navegador (localStorage)
     function configureSurveyElements() {
       const savedUrl = localStorage.getItem("active_survey_url") || DEFAULT_FORM_URL;
-      const savedGid = localStorage.getItem("active_spreadsheet_gid") || DEFAULT_GID;
       
       const linkEl = document.getElementById("surveyLink");
       const imgEl = document.getElementById("qrCodeImg");
       const inputEl = document.getElementById("adminFormUrlInput");
-      const gidInputEl = document.getElementById("adminGidInput");
       
       linkEl.href = savedUrl;
       linkEl.innerText = savedUrl.substring(0, 48) + "...";
       imgEl.src = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(savedUrl)}`;
       inputEl.value = savedUrl === DEFAULT_FORM_URL ? "" : savedUrl;
-      gidInputEl.value = savedGid === DEFAULT_GID ? "" : savedGid;
     }
 
     // Salvar novas configurações inseridas pelo admin
     function saveAdminSettings() {
       const inputUrlVal = document.getElementById("adminFormUrlInput").value.trim();
-      const inputGidVal = document.getElementById("adminGidInput").value.trim();
       
       // Salvar URL
       if (!inputUrlVal) {
@@ -837,18 +827,11 @@
         }
         localStorage.setItem("active_survey_url", inputUrlVal);
       }
-
-      // Salvar GID
-      if (!inputGidVal) {
-        localStorage.removeItem("active_spreadsheet_gid");
-      } else {
-        localStorage.setItem("active_spreadsheet_gid", inputGidVal);
-      }
       
-      showSystemToast("Configurações salvas! Recarregando banco de dados...");
+      showSystemToast("Formulário ativo atualizado com sucesso!");
       configureSurveyElements();
       
-      // Recarregar os dados da planilha e atualizar a tela
+      // Recarregar os dados do dashboard
       const overlay = document.getElementById("loadingOverlay");
       overlay.classList.remove("hidden");
       
@@ -860,7 +843,7 @@
         })
         .catch(err => {
           overlay.classList.add("hidden");
-          showSystemToast("Erro ao carregar dados do novo GID. Verifique os valores.");
+          showSystemToast("Erro ao recarregar os dados.");
         });
       
       setTimeout(() => lucide.createIcons(), 50);
@@ -920,9 +903,53 @@
     }
 
     function loadDataFromGoogleSheet() {
-      const activeGidsStr = localStorage.getItem("active_spreadsheet_gid") || DEFAULT_GID;
-      const gids = activeGidsStr.split(",").map(s => s.trim()).filter(Boolean);
-      
+      // 1. Tentar fazer a varredura automática de abas via htmlview + CORS Proxy
+      const htmlviewUrl = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/htmlview`;
+      const proxyUrl = `https://corsproxy.io/?` + encodeURIComponent(htmlviewUrl);
+
+      return fetch(proxyUrl)
+        .then(res => {
+          if (!res.ok) throw new Error("Erro ao acessar proxy CORS.");
+          return res.text();
+        })
+        .then(htmlText => {
+          let content = htmlText;
+          try {
+            const parsed = JSON.parse(htmlText);
+            if (parsed && parsed.contents) {
+              content = parsed.contents;
+            }
+          } catch(e) {}
+
+          const items = [];
+          const regex = /name:\s*["']([^"']+)["'][^{}]*gid:\s*["']([^"']+)["']/g;
+          let match;
+          while ((match = regex.exec(content)) !== null) {
+            items.push({ name: match[1], gid: match[2] });
+          }
+
+          let gidsToFetch = [];
+          if (items.length > 0) {
+            console.log("Abas descobertas na planilha:", items);
+            const ignoreList = ["config", "dashboard", "home", "painel", "protótipo", "dados_consolidados", "consolidado"];
+            gidsToFetch = items
+              .filter(item => !ignoreList.some(ignored => item.name.toLowerCase().includes(ignored)))
+              .map(item => item.gid);
+          }
+
+          if (gidsToFetch.length === 0) {
+            gidsToFetch = [DEFAULT_GID];
+          }
+
+          return fetchGidsAndConsolidate(gidsToFetch);
+        })
+        .catch(err => {
+          console.warn("Falha na varredura automática de abas, usando GID padrão.", err);
+          return fetchGidsAndConsolidate([DEFAULT_GID]);
+        });
+    }
+
+    function fetchGidsAndConsolidate(gids) {
       const fetchPromises = gids.map(gid => {
         const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:json&gid=${gid}`;
         return fetch(url)
@@ -938,7 +965,7 @@
           })
           .catch(err => {
             console.warn(`Falha ao carregar aba ${gid}:`, err);
-            return null; // Retorna null para ignorar a aba com falha sem travar as outras
+            return null;
           });
       });
 
@@ -955,7 +982,6 @@
             
             if (!rows || rows.length === 0) return;
 
-            // Encontrar os índices corretos dinamicamente
             let idxTimestamp = 0;
             let idxShow = 1;
             let idxNota = 2;
@@ -1025,7 +1051,6 @@
               const resumo = getValue(idxResumo) || "Análise executiva de IA em processamento...";
               const sugestao = getValue(idxSugestao) || "Aguardando sugestão operacional estruturada...";
 
-              // LÓGICA DE TEMPORADA DINÂMICA
               let temporada = "2026";
               const rawTimestampStr = rawTimestamp.toString();
               if (rawTimestampStr.includes("2025")) {
@@ -1065,7 +1090,6 @@
           });
 
           if (consolidatedRows.length > 0) {
-            // Ordenação cronológica consolidada decrescente (mais recente primeiro)
             const parseDate = (dStr) => {
               if (!dStr) return new Date(0);
               const parts = dStr.match(/(\d{2})\/(\d{2})\/(\d{4})\s+(\d{2}):(\d{2}):?(\d{2})?/);
