@@ -429,7 +429,7 @@
           Análise Combinada
         </button>
         <button id="biModeBenchmarkBtn" onclick="setBiMode('benchmark')" class="px-4 py-2 rounded-lg text-xs font-bold transition-all text-slate-400 hover:text-slate-200">
-          Benchmarking entre Shows
+          Comparativo entre Eventos
         </button>
       </div>
 
@@ -446,7 +446,6 @@
             <select id="crossVarX" class="w-full bg-[#121417] border border-card-border rounded-lg px-4 py-2 text-xs font-bold text-white focus:outline-none focus:border-brand-red cursor-pointer" onchange="renderBI()">
               <option value="pilar" selected>Setor Operacional</option>
               <option value="setor">Setor Físico</option>
-              <option value="show">Show</option>
             </select>
           </div>
           <!-- Variable Y -->
@@ -456,7 +455,6 @@
             </label>
             <select id="crossVarY" class="w-full bg-[#121417] border border-card-border rounded-lg px-4 py-2 text-xs font-bold text-white focus:outline-none focus:border-brand-red cursor-pointer" onchange="renderBI()">
               <option value="satisfacao" selected>Satisfação</option>
-              <option value="faixaEtaria">Faixa Etária</option>
               <option value="gravidade">Gravidade</option>
             </select>
           </div>
@@ -490,10 +488,8 @@
           </div>
         </div>
 
-        <div class="text-[10px] text-slate-500 bg-[#121417]/60 p-3 rounded border border-card-border/40 max-w-sm leading-relaxed self-stretch flex items-center">
-          <i data-lucide="bar-chart-3" class="h-7 w-7 text-brand-red mr-2.5 flex-shrink-0"></i>
-          <span id="biHelpText">Análise operacional: identifique gargalos sistêmicos por departamento versus perfil de público e nível de experiência.</span>
-        </div>
+        <!-- Elemento de ajuda ocultado para limpeza visual -->
+        <span id="biHelpText" class="hidden"></span>
       </div>
 
       <!-- CORRELATION RESULTS CONTAINER -->
