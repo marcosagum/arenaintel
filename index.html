@@ -91,6 +91,13 @@
       );
       border-left: 3px solid rgba(227,6,19,0.5);
     }
+    .scrollbar-none::-webkit-scrollbar {
+      display: none;
+    }
+    .scrollbar-none {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
   </style>
 </head>
 <body class="bg-panel-bg text-slate-200 font-sans min-h-screen selection:bg-brand-red selection:text-white pb-12">
@@ -129,9 +136,8 @@
         </div>
       </div>
 
-      <!-- Controls: Status + Simulation -->
-      <div class="flex flex-wrap items-center gap-3 md:gap-4">
-
+      <!-- Controls: Status -->
+      <div class="flex items-center gap-3">
         <!-- Live Status Badge -->
         <div class="flex items-center gap-2 bg-card-bg border border-card-border px-3.5 py-1.5 rounded-full corporate-shadow">
           <span class="relative flex h-2.5 w-2.5">
@@ -140,41 +146,33 @@
           </span>
           <span class="text-[10px] font-bold tracking-wider text-emerald-400 uppercase">MONITORAMENTO ATIVO</span>
         </div>
-
-        <!-- Simulation Toggle -->
-        <label class="relative flex items-center cursor-pointer select-none">
-          <input type="checkbox" id="simToggle" class="sr-only peer">
-          <div class="w-9 h-5 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[4px] after:left-[4px] after:bg-slate-400 after:rounded-full after:h-3.5 after:w-3.5 after:transition-all peer-checked:bg-brand-red peer-checked:after:bg-white"></div>
-          <span class="ms-2.5 text-xs font-semibold text-slate-400 peer-checked:text-slate-300">Simulador</span>
-        </label>
-
       </div>
     </header>
 
-    <!-- NEW NAVIGATION & FILTERS BAR (Unified Premium Control Panel) -->
-    <div class="bg-card-bg border border-card-border rounded-xl p-2.5 mb-6 corporate-shadow flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+    <!-- NEW NAVIGATION & FILTERS BAR (Unified Premium Control Panel - Single Line) -->
+    <div class="bg-card-bg border border-card-border rounded-xl p-2 mb-6 corporate-shadow flex flex-row items-center justify-between gap-4 overflow-x-auto select-none scrollbar-none flex-nowrap">
       
       <!-- SPA NAV TABS -->
-      <nav class="flex flex-wrap gap-1 p-0.5">
-        <button id="tabBtn1" class="flex items-center gap-2 px-5 py-2.5 rounded-lg text-xs font-bold transition-all bg-brand-red text-white shadow-md shadow-brand-red/20" onclick="switchTab(1)">
-          <i data-lucide="activity" class="h-4 w-4"></i>
-          Monitoramento Ao Vivo
+      <nav class="flex flex-row gap-1 p-0.5 flex-nowrap flex-shrink-0">
+        <button id="tabBtn1" class="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all bg-brand-red text-white shadow-md shadow-brand-red/20 flex-shrink-0" onclick="switchTab(1)">
+          <i data-lucide="activity" class="h-3.5 w-3.5"></i>
+          Ao Vivo
         </button>
-        <button id="tabBtn2" class="flex items-center gap-2 px-5 py-2.5 rounded-lg text-xs font-bold text-slate-400 hover:text-slate-200 transition-all" onclick="switchTab(2)">
-          <i data-lucide="message-square" class="h-4 w-4"></i>
-          Fila de Feedbacks
+        <button id="tabBtn2" class="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold text-slate-400 hover:text-slate-200 transition-all flex-shrink-0" onclick="switchTab(2)">
+          <i data-lucide="message-square" class="h-3.5 w-3.5"></i>
+          Feedbacks
         </button>
-        <button id="tabBtn3" class="flex items-center gap-2 px-5 py-2.5 rounded-lg text-xs font-bold text-slate-400 hover:text-slate-200 transition-all" onclick="switchTab(3)">
-          <i data-lucide="users" class="h-4 w-4"></i>
-          Alinhamento e Fechamento
+        <button id="tabBtn3" class="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold text-slate-400 hover:text-slate-200 transition-all flex-shrink-0" onclick="switchTab(3)">
+          <i data-lucide="users" class="h-3.5 w-3.5"></i>
+          Alinhamento
         </button>
-        <button id="tabBtn4" class="flex items-center gap-2 px-5 py-2.5 rounded-lg text-xs font-bold text-slate-400 hover:text-slate-200 transition-all" onclick="switchTab(4)">
-          <i data-lucide="git-compare" class="h-4 w-4"></i>
-          Cruzamento de Dados
+        <button id="tabBtn4" class="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold text-slate-400 hover:text-slate-200 transition-all flex-shrink-0" onclick="switchTab(4)">
+          <i data-lucide="git-compare" class="h-3.5 w-3.5"></i>
+          Cruzamento
         </button>
-        <button id="tabBtn5" class="flex items-center gap-2 px-5 py-2.5 rounded-lg text-xs font-bold text-slate-400 hover:text-slate-200 transition-all" onclick="switchTab(5)">
-          <i data-lucide="qr-code" class="h-4 w-4"></i>
-          Acesso à Pesquisa
+        <button id="tabBtn5" class="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold text-slate-400 hover:text-slate-200 transition-all flex-shrink-0" onclick="switchTab(5)">
+          <i data-lucide="qr-code" class="h-3.5 w-3.5"></i>
+          Pesquisa
         </button>
       </nav>
 
@@ -428,7 +426,7 @@
       <!-- MODE SWITCHER IN TAB 4 (CORRELATION VS BENCHMARK) -->
       <div class="flex items-center gap-1 bg-[#121417] p-1.5 rounded-xl border border-card-border max-w-fit corporate-shadow">
         <button id="biModeCorrelationBtn" onclick="setBiMode('correlation')" class="px-4 py-2 rounded-lg text-xs font-bold transition-all bg-brand-red text-white shadow-md shadow-brand-red/20">
-          Análise de Correlação (Matriz Pivot)
+          Análise Combinada
         </button>
         <button id="biModeBenchmarkBtn" onclick="setBiMode('benchmark')" class="px-4 py-2 rounded-lg text-xs font-bold transition-all text-slate-400 hover:text-slate-200">
           Benchmarking entre Shows
@@ -443,23 +441,23 @@
           <!-- Variable X -->
           <div class="space-y-2">
             <label for="crossVarX" class="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
-              <span class="inline-block w-2.5 h-2.5 rounded-full bg-brand-red"></span> Setor Operacional Analisado
+              <span class="inline-block w-2.5 h-2.5 rounded-full bg-brand-red"></span> Setor
             </label>
             <select id="crossVarX" class="w-full bg-[#121417] border border-card-border rounded-lg px-4 py-2 text-xs font-bold text-white focus:outline-none focus:border-brand-red cursor-pointer" onchange="renderBI()">
-              <option value="pilar" selected>Setor Operacional / Departamento</option>
-              <option value="setor">Localização Física (Setor)</option>
-              <option value="show">Show / Evento</option>
+              <option value="pilar" selected>Setor Operacional</option>
+              <option value="setor">Setor Físico</option>
+              <option value="show">Show</option>
             </select>
           </div>
           <!-- Variable Y -->
           <div class="space-y-2">
             <label for="crossVarY" class="text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
-              <span class="inline-block w-2.5 h-2.5 rounded-full bg-white"></span> Métrica de Correlação
+              <span class="inline-block w-2.5 h-2.5 rounded-full bg-white"></span> Indicador
             </label>
             <select id="crossVarY" class="w-full bg-[#121417] border border-card-border rounded-lg px-4 py-2 text-xs font-bold text-white focus:outline-none focus:border-brand-red cursor-pointer" onchange="renderBI()">
-              <option value="satisfacao" selected>Nível de Satisfação (Excelente / Médio / Crítico)</option>
-              <option value="faixaEtaria">Faixa Etária do Público</option>
-              <option value="gravidade">Gravidade do Feedback (Leve / Moderado / Crítico)</option>
+              <option value="satisfacao" selected>Satisfação</option>
+              <option value="faixaEtaria">Faixa Etária</option>
+              <option value="gravidade">Gravidade</option>
             </select>
           </div>
         </div>
@@ -503,7 +501,7 @@
         <!-- Pivot Table (1/3) -->
         <div class="bg-card-bg border border-card-border p-5 rounded-xl flex flex-col h-[480px] corporate-shadow">
           <h3 class="text-sm font-bold text-white uppercase tracking-wider mb-4 border-b border-card-border pb-3 flex items-center gap-1.5">
-            <i data-lucide="table" class="h-4.5 w-4.5 text-brand-red"></i> Matriz Cruzada (Pivot Table)
+            <i data-lucide="table" class="h-4.5 w-4.5 text-brand-red"></i> Tabela Cruzada
           </h3>
           <div class="flex-1 overflow-auto">
             <table class="w-full text-left text-xs border-collapse">
@@ -516,7 +514,7 @@
         <!-- Stacked Bar Chart (1/3) -->
         <div class="bg-card-bg border border-card-border p-5 rounded-xl flex flex-col h-[480px] corporate-shadow">
           <h3 class="text-sm font-bold text-white uppercase tracking-wider mb-4 border-b border-card-border pb-3 flex items-center gap-1.5">
-            <i data-lucide="bar-chart-4" class="h-4.5 w-4.5 text-brand-red"></i> Correlação Analítica (Barras)
+            <i data-lucide="bar-chart-4" class="h-4.5 w-4.5 text-brand-red"></i> Gráfico de Barras
           </h3>
           <div class="flex-1 relative flex items-center justify-center">
             <canvas id="crossStackedChart" class="max-h-[380px] w-full"></canvas>
@@ -526,7 +524,7 @@
         <!-- Donut Chart (1/3) -->
         <div class="bg-card-bg border border-card-border p-5 rounded-xl flex flex-col h-[480px] corporate-shadow">
           <h3 class="text-sm font-bold text-white uppercase tracking-wider mb-4 border-b border-card-border pb-3 flex items-center gap-1.5">
-            <i data-lucide="pie-chart" class="h-4.5 w-4.5 text-brand-red"></i> Distribuição Consolidada (Métrica Y)
+            <i data-lucide="pie-chart" class="h-4.5 w-4.5 text-brand-red"></i> Distribuição Consolidada
           </h3>
           <div class="flex-1 relative flex items-center justify-center">
             <canvas id="crossDonutChart" class="max-h-[320px] w-full"></canvas>
@@ -539,18 +537,18 @@
         <!-- Benchmark Variation Pivot Table -->
         <div class="bg-card-bg border border-card-border p-5 rounded-xl flex flex-col h-[480px] corporate-shadow">
           <h3 class="text-sm font-bold text-white uppercase tracking-wider mb-4 border-b border-card-border pb-3 flex items-center gap-1.5">
-            <i data-lucide="table-properties" class="h-4.5 w-4.5 text-brand-red"></i> Matriz Comparativa (Variação de Gravidade)
+            <i data-lucide="table-properties" class="h-4.5 w-4.5 text-brand-red"></i> Comparativo de Gravidade
           </h3>
           <div class="flex-1 overflow-auto">
             <table class="w-full text-left text-xs border-collapse">
               <thead class="sticky top-0 bg-[#1A1D24] text-[10px] uppercase tracking-wider text-slate-400 border-b border-card-border z-10">
                 <tr class="border-b border-card-border">
-                  <th class="p-3">Setor Operacional</th>
-                  <th class="p-3 text-center">Nota Média (Show A)</th>
-                  <th class="p-3 text-center">Nota Média (Show B)</th>
-                  <th class="p-3 text-center">Graves (Show A)</th>
-                  <th class="p-3 text-center">Graves (Show B)</th>
-                  <th class="p-3 text-center">Variação % de Graves</th>
+                  <th class="p-3">Setor</th>
+                  <th class="p-3 text-center">Média A</th>
+                  <th class="p-3 text-center">Média B</th>
+                  <th class="p-3 text-center">Graves A</th>
+                  <th class="p-3 text-center">Graves B</th>
+                  <th class="p-3 text-center">Variação</th>
                 </tr>
               </thead>
               <tbody id="benchmarkTableBody" class="divide-y divide-card-border/50"></tbody>
@@ -1251,37 +1249,7 @@
     // -----------------------------------------------------------
     let simInterval = null;
     function setupSimulation() {
-      const simToggle = document.getElementById("simToggle");
-      const fireSimulation = () => {
-        if (incomingFeedbacksPool.length === 0) return;
-        const source = incomingFeedbacksPool[Math.floor(Math.random() * incomingFeedbacksPool.length)];
-        const newFb = { ...source, id: feedbackData.length + 1, insightRegistrado: false };
-        feedbackData.unshift(newFb);
-        
-        // Garante que o show do simulador seja incluído dinamicamente nas opções se não existir
-        updateShowDropdownOptions();
-        
-        refreshActiveTab();
-        showLiveToast(newFb);
-        
-        const badge = document.getElementById("newFeedbackBadge");
-        if (badge) {
-          badge.classList.remove("hidden");
-          setTimeout(() => badge.classList.add("hidden"), 4000);
-        }
-      };
-
-      if (simToggle.checked) simInterval = setInterval(fireSimulation, 15000);
-
-      simToggle.addEventListener("change", (e) => {
-        if (e.target.checked) {
-          simInterval = setInterval(fireSimulation, 15000);
-          showSystemToast("Simulador local ativado.");
-        } else {
-          clearInterval(simInterval);
-          showSystemToast("Simulador local pausado.");
-        }
-      });
+      // Período de testes finalizado. Pronto para produção.
     }
 
     function showLiveToast(fb) {
@@ -1848,7 +1816,7 @@
       const tableHead = document.getElementById("pivotTableHeader");
       const tableBody = document.getElementById("pivotTableBody");
 
-      let headerTextX = varX === "pilar" ? "Setor Operacional" : varX === "setor" ? "Localização Física" : "Show / Evento";
+      let headerTextX = varX === "pilar" ? "Setor" : varX === "setor" ? "Setor Físico" : "Show";
       let headerHtml = `<tr class="border-b border-card-border"><th class="p-3">${headerTextX}</th>`;
       uniqueY.forEach(y => { headerHtml += `<th class="p-3 text-center">${y}</th>`; });
       headerHtml += `<th class="p-3 text-center">Total</th></tr>`;
