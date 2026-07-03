@@ -218,7 +218,7 @@
       <!-- SCORECARDS -->
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         <!-- SCORECARD 1 -->
-        <div class="bg-card-bg border border-card-border p-6 rounded-xl hover-card flex items-center justify-between relative overflow-hidden corporate-shadow">
+        <div class="bg-card-bg border border-card-border p-6 rounded-xl hover-card flex items-center justify-between relative overflow-hidden corporate-shadow cursor-pointer hover:border-brand-red transition-all select-none" onclick="onClickKpiSatisfacao()">
           <div class="space-y-2">
             <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Média de Satisfação</p>
             <div class="flex items-baseline gap-2">
@@ -233,7 +233,7 @@
         </div>
 
         <!-- SCORECARD 2 -->
-        <div class="bg-card-bg border border-card-border p-6 rounded-xl hover-card flex items-center justify-between relative overflow-hidden corporate-shadow">
+        <div class="bg-card-bg border border-card-border p-6 rounded-xl hover-card flex items-center justify-between relative overflow-hidden corporate-shadow cursor-pointer hover:border-brand-red transition-all select-none" onclick="onClickKpiFeedbacks()">
           <div class="space-y-2">
             <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Feedbacks Coletados</p>
             <div class="flex items-baseline gap-2">
@@ -250,7 +250,7 @@
         </div>
 
         <!-- SCORECARD 3 -->
-        <div class="bg-card-bg border border-card-border p-6 rounded-xl hover-card flex items-center justify-between relative overflow-hidden corporate-shadow" id="kpiCriticalCard">
+        <div class="bg-card-bg border border-card-border p-6 rounded-xl hover-card flex items-center justify-between relative overflow-hidden corporate-shadow cursor-pointer hover:border-brand-red transition-all select-none" id="kpiCriticalCard" onclick="onClickKpiCriticos()">
           <div class="space-y-2">
             <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Zonas Críticas Pendentes</p>
             <div class="flex items-baseline gap-2">
@@ -1208,7 +1208,41 @@
       return data;
     }
 
+    function getActiveSectors() {
+      const data = getFilteredData();
+      const sectorsSet = new Set();
+      data.forEach(item => {
+        if (item.setor) {
+          sectorsSet.add(item.setor.trim());
+        }
+      });
+      const sectors = Array.from(sectorsSet).filter(Boolean).sort();
+      return sectors.length > 0 ? sectors : ["Pista Premium", "Arquibancada", "Camarote"];
+    }
+
+    function updateSectorDropdownOptions() {
+      const filterSector = document.getElementById("filterSector");
+      if (!filterSector) return;
+      const currentSelected = filterSector.value;
+      
+      filterSector.innerHTML = `<option value="Todos">Setor Físico: Todos</option>`;
+      const activeSectors = getActiveSectors();
+      activeSectors.forEach(sec => {
+        const opt = document.createElement("option");
+        opt.value = sec;
+        opt.text = sec;
+        filterSector.appendChild(opt);
+      });
+      
+      if (activeSectors.includes(currentSelected)) {
+        filterSector.value = currentSelected;
+      } else {
+        filterSector.value = "Todos";
+      }
+    }
+
     function refreshActiveTab() {
+      updateSectorDropdownOptions();
       if (currentTab === 1) updateDashboard();
       else if (currentTab === 2) applyFilters();
       else if (currentTab === 3) renderGDBlocks();
@@ -1220,28 +1254,62 @@
     // -----------------------------------------------------------
     function switchTab(tabNumber) {
       currentTab = tabNumber;
-      const inactiveClass = "flex items-center gap-2 px-5 py-2.5 rounded-lg text-xs font-bold text-slate-400 hover:text-slate-200 transition-all";
-      const activeClass = "flex items-center gap-2 px-5 py-2.5 rounded-lg text-xs font-bold transition-all bg-brand-red text-white shadow-md shadow-brand-red/20";
+      // Simplificado com base nos nomes encurtados das abas
+      const inactiveClass = "flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold text-slate-400 hover:text-slate-200 transition-all flex-shrink-0";
+      const activeClass = "flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all bg-brand-red text-white shadow-md shadow-brand-red/20 flex-shrink-0";
 
       [1,2,3,4,5].forEach(n => {
-        document.getElementById(`tabBtn${n}`).className = inactiveClass;
-        document.getElementById(`tabContent${n}`).classList.add("hidden");
-        document.getElementById(`tabContent${n}`).classList.remove("block");
-        if (n === 5) {
-          document.getElementById(`tabContent${n}`).classList.remove("flex");
+        const btn = document.getElementById(`tabBtn${n}`);
+        if (btn) btn.className = inactiveClass;
+        
+        const content = document.getElementById(`tabContent${n}`);
+        if (content) {
+          content.classList.add("hidden");
+          content.classList.remove("block");
+          if (n === 5) {
+            content.classList.remove("flex");
+          }
         }
       });
 
-      document.getElementById(`tabBtn${tabNumber}`).className = activeClass;
-      document.getElementById(`tabContent${tabNumber}`).classList.remove("hidden");
-      if (tabNumber === 5) {
-        document.getElementById(`tabContent${tabNumber}`).classList.add("flex");
-      } else {
-        document.getElementById(`tabContent${tabNumber}`).classList.add("block");
+      const activeBtn = document.getElementById(`tabBtn${tabNumber}`);
+      if (activeBtn) activeBtn.className = activeClass;
+
+      const activeContent = document.getElementById(`tabContent${tabNumber}`);
+      if (activeContent) {
+        activeContent.classList.remove("hidden");
+        if (tabNumber === 5) {
+          activeContent.classList.add("flex");
+        } else {
+          activeContent.classList.add("block");
+        }
       }
 
       refreshActiveTab();
       setTimeout(() => lucide.createIcons(), 50);
+    }
+
+    // -----------------------------------------------------------
+    // INTERATIVIDADE DOS CARTÕES KPI (AO VIVO)
+    // -----------------------------------------------------------
+    function onClickKpiSatisfacao() {
+      switchTab(4);
+      setBiMode("correlation");
+      document.getElementById("crossVarX").value = "pilar";
+      document.getElementById("crossVarY").value = "satisfacao";
+      renderBI();
+    }
+
+    function onClickKpiFeedbacks() {
+      clearAllFilters();
+      switchTab(2);
+    }
+
+    function onClickKpiCriticos() {
+      clearAllFilters();
+      document.getElementById("filterImpact").value = "Crítico";
+      applyFilters();
+      switchTab(2);
     }
 
     // -----------------------------------------------------------
@@ -1604,7 +1672,13 @@
 
         const loggedInsights = deptFeedbacks.filter(item => item.insightRegistrado);
         const card = document.createElement("div");
-        card.className = "bg-card-bg border border-card-border p-4 rounded-xl flex flex-col gap-3 relative overflow-hidden corporate-shadow hover-card";
+        card.className = "bg-card-bg border border-card-border p-4 rounded-xl flex flex-col gap-3 relative overflow-hidden corporate-shadow hover-card cursor-pointer hover:border-brand-red transition-all select-none";
+        card.onclick = () => {
+          clearAllFilters();
+          document.getElementById("filterPillar").value = dept;
+          applyFilters();
+          switchTab(2);
+        };
 
         let ratingColorClass = "text-slate-400";
         if (avgRating !== "N/A") {
@@ -1774,7 +1848,7 @@
       if (varX === "pilar") {
         uniqueX = [...officialSectors];
       } else if (varX === "setor") {
-        uniqueX = ["Pista Premium", "Arquibancada", "Camarote"];
+        uniqueX = getActiveSectors();
       } else {
         // Shows dinâmicos carregados da planilha sob a temporada ativa
         const season = document.getElementById("seasonSelect").value;
@@ -1837,6 +1911,7 @@
 
       // 2. RENDER STACKED BAR CHART
       const ctx = document.getElementById("crossStackedChart").getContext("2d");
+      const sectorPalette = ["#E30613", "#3182CE", "#805AD5", "#DD6B20", "#38A169", "#E53E3E", "#319795", "#A0AEC0"];
       const colorsMap = {
         "Excelente":"#10B981", "Médio":"#F59E0B", "Crítico":"#EF4444",
         "Pista Premium":"#E30613", "Arquibancada":"#4A5568", "Camarote":"#A0AEC0",
@@ -1844,10 +1919,15 @@
         "Leve":"#10B981", "Moderado":"#F59E0B"
       };
 
-      const datasets = uniqueY.map(y => ({
+      const getDatasetColor = (label, index) => {
+        if (colorsMap[label]) return colorsMap[label];
+        return sectorPalette[index % sectorPalette.length];
+      };
+
+      const datasets = uniqueY.map((y, idx) => ({
         label: y,
         data: uniqueX.map(x => matrix[x][y]),
-        backgroundColor: colorsMap[y] || "#4A5568",
+        backgroundColor: getDatasetColor(y, idx),
         borderRadius: 4
       }));
 
@@ -1883,7 +1963,7 @@
           labels: uniqueY,
           datasets: [{
             data: totalsY,
-            backgroundColor: uniqueY.map(y => colorsMap[y] || "#4A5568"),
+            backgroundColor: uniqueY.map((y, idx) => getDatasetColor(y, idx)),
             borderWidth: 2,
             borderColor: '#1A1D24',
             hoverOffset: 4
