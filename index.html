@@ -996,7 +996,7 @@
                 }
               } else if (label.includes("feedback") || label.includes("detalhes") || label.includes("coment")) {
                 idxFeedback = colIndex;
-              } else if (label.includes("setor f") || label.includes("onde assistiu") || label.includes("setor físico")) {
+              } else if ((label.includes("setor") && !label.includes("operacional") && !label.includes("pilar")) || label.includes("onde assistiu") || label.includes("setor f") || label.includes("setor físico")) {
                 idxSetor = colIndex;
               } else if (label.includes("faixa") || label.includes("idade")) {
                 idxFaixaEtaria = colIndex;
@@ -1016,7 +1016,8 @@
                   const cells = r.c || [];
                   return cells[colIdx] && cells[colIdx].v ? cells[colIdx].v.toString().toLowerCase() : "";
                 });
-                if (sampleValues.some(val => val.includes("pista") || val.includes("arquibancada") || val.includes("camarote"))) {
+                const avgLength = sampleValues.reduce((sum, v) => sum + v.length, 0) / (sampleValues.length || 1);
+                if (avgLength < 35 && sampleValues.some(val => val.includes("pista") || val.includes("arquibancada") || val.includes("camarote"))) {
                   idxSetor = colIdx;
                   break;
                 }
