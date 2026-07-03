@@ -626,7 +626,7 @@
       </div>
 
       <!-- Configuração da URL (Exclusivo Administradores) -->
-      <div class="bg-card-bg border border-card-border p-5 rounded-xl corporate-shadow max-w-2xl w-full">
+      <div class="bg-card-bg border border-card-border p-5 rounded-xl corporate-shadow max-w-2xl w-full admin-only">
         <details class="group">
           <summary class="text-xs font-bold text-slate-400 hover:text-slate-300 cursor-pointer select-none flex items-center justify-between list-none">
             <span class="flex items-center gap-2">
@@ -787,8 +787,9 @@
     let feedbackData = []; // Carregados dinamicamente
 
     // -----------------------------------------------------------
-    // GLOBAL STATE
+    // GLOBAL STATE & ROLES
     // -----------------------------------------------------------
+    const isViewer = new URLSearchParams(window.location.search).get("viewer") === "true";
     let currentTab = 1;
     let sessionInsightsCount = 0;
     let selectedInsightId = null;
@@ -807,6 +808,9 @@
       lucide.createIcons();
       configureSurveyElements();
       initDashboard();
+      if (isViewer) {
+        document.querySelectorAll(".admin-only").forEach(el => el.classList.add("hidden"));
+      }
     });
 
     // Configurar a URL ativa carregada da memória do navegador (localStorage)
@@ -1566,11 +1570,13 @@
         }
         let actionBtn = "";
         if (item.satisfacao === "Crítico" && !item.insightRegistrado) {
-          actionBtn = `<button onclick="openInsightModal(${item.id})" class="px-2.5 py-1 bg-brand-red hover:bg-brand-red-hover text-[10px] font-bold text-white transition-all rounded shadow-md shadow-brand-red/10 flex items-center justify-center gap-1 mx-auto"><i data-lucide="lightbulb" class="h-3 w-3"></i> Registrar Insight</button>`;
+          actionBtn = isViewer ? 
+            `<span class="text-rose-400 font-extrabold text-[9px] uppercase tracking-wider block text-center bg-rose-950/20 px-2 py-0.5 rounded border border-rose-900/30 select-none">Pendente</span>` :
+            `<button onclick="openInsightModal(${item.id})" class="px-2.5 py-1 bg-brand-red hover:bg-brand-red-hover text-[10px] font-bold text-white transition-all rounded shadow-md shadow-brand-red/10 flex items-center justify-center gap-1 mx-auto"><i data-lucide="lightbulb" class="h-3 w-3"></i> Registrar Insight</button>`;
         } else if (item.insightRegistrado) {
           actionBtn = `<div class="flex flex-col items-center gap-0.5 text-emerald-400 font-bold text-[9px] tracking-wide text-center"><span class="flex items-center gap-0.5"><i data-lucide="check" class="h-3.5 w-3.5"></i> Insight Logado</span><span class="text-slate-500 font-mono text-[8px] truncate max-w-[120px]" title="${item.insightTexto}">${item.insightTexto}</span></div>`;
         } else {
-          actionBtn = `<span class="text-[10px] text-slate-500 font-medium italic block text-center">N/A (Satisfeito)</span>`;
+          actionBtn = `<span class="text-[10px] text-slate-500 font-medium italic block text-center">N/A</span>`;
         }
         row.innerHTML = `
           <td class="p-3.5 font-bold text-white">${item.setor}</td>
@@ -1587,6 +1593,7 @@
 
     // Modal
     function openInsightModal(id) {
+      if (isViewer) return;
       selectedInsightId = id;
       const fb = feedbackData.find(item => item.id === id);
       if (!fb) return;
